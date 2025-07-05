@@ -1,10 +1,12 @@
 const express = require('express');
-const usersRoutes = require('./routes/users.js');
+const usersRoutes = require('./routes/userRoute.js');
 const middlewareLogRequest = require('./middleware/logs.js');
 const siswaRoute = require('./routes/siswaRoute.js');
+const dbpool = require('./config/databaseConfig.js'); // Pastikan ini ada
 
 const app = express();
 
+app.use(express.json()); // <<--- penting agar bisa baca req.body
 app.use(middlewareLogRequest);
 
 app.use('/users', usersRoutes);
@@ -37,4 +39,4 @@ app.post("/", (req,res) => {
 
 app.listen(4000, () => {
     console.log('server berhasil di running di port 4000');
-})
+});
