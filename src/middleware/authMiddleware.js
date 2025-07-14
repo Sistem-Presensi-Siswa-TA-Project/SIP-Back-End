@@ -1,22 +1,21 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Format: "Bearer <token>"
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(403).json({ message: "Token tidak ditemukan" });
-    }
+  if (!token) {
+    return res.status(401).json({ message: 'Akses ditolak, token tidak ditemukan' });
+  }
 
-    const token = authHeader.split(" ")[1];
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: 'Token tidak valid' });
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (err) {
-        return res.status(401).json({ message: "Token tidak valid" });
-    }
+    req.user = user; // Token berisi: id_user, role, id_piket
+    next();
+  });
 };
 
-module.exports = verifyToken;
+module.exports = authenticateToken;

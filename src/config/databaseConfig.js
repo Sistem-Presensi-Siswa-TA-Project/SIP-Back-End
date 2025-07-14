@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config(); // pastikan baris ini ada!
+const dotenv = require('dotenv');
+dotenv.config();
 
 const db = mysql.createPool({
   host: process.env.MYSQL_HOST,

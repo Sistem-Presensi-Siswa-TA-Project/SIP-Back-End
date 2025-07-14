@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 
 // Ganti password ini dengan password yang ingin kamu hash
-const plainPassword = 'rahasia123';
+const plainPassword = 'test2';
 
 // Jumlah salt rounds (standar: 10)
 const saltRounds = 10;

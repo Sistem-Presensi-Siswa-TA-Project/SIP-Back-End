@@ -1,20 +1,25 @@
 {
   "name": "sip_siswa",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Back-End dari Sistem Informasi Presensi SIswa di SMP Plus Babussalam sebagai Tugas Akhir (TA) Project",
+  "main": "hashPassword.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "dev": "nodemon src/index.js"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
-    "dotenv": "^17.0.1",
+    "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.14.1",
+    "mysql2": "^3.14.2"
+  },
+  "devDependencies": {
     "nodemon": "^3.1.10"
   }
 }

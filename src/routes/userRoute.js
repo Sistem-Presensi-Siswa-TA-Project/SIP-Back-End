@@ -1,28 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/userController.js');
 
-const { loginUser } = require('../controller/userController');
-const verifyToken = require('../middleware/authMiddleware');
-const { allowRole } = require('../middleware/roleMiddleware');
+// GET all users
+router.get('/', userController.getAllUsers);
 
-// Route untuk login
-router.post('/login', loginUser);
+// POST new user
+router.post('/', userController.createUser);
 
-// Route untuk dashboard berdasarkan role
-router.get('/admin/dashboard', verifyToken, allowRole('admin'), (req, res) => {
-    res.json({ message: `Halo Admin ${req.user.username}` });
-});
+// PUT update user by id_user
+router.put('/:id_user', userController.updateUser);
 
-router.get('/guru/dashboard', verifyToken, allowRole('guru'), (req, res) => {
-    res.json({ message: `Halo Guru ${req.user.username}` });
-});
-
-router.get('/piket/dashboard', verifyToken, allowRole('piket'), (req, res) => {
-    res.json({ message: `Halo Piket ${req.user.username}` });
-});
-
-router.get('/osis/dashboard', verifyToken, allowRole('osis'), (req, res) => {
-    res.json({ message: `Halo OSIS ${req.user.username}` });
-});
+// DELETE user by id_user
+router.delete('/:id_user', userController.deleteUser);
 
 module.exports = router;
