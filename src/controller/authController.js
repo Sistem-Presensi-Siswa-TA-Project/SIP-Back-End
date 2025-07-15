@@ -2,7 +2,6 @@ const db = require('../config/databaseConfig');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -30,29 +29,10 @@ exports.login = async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    let dashboard;
-    switch (user.role) {
-      case 'admin':
-        dashboard = '/dashboard/admin';
-        break;
-      case 'guru_matpel':
-        dashboard = '/dashboard/guru-matpel';
-        break;
-      case 'guru_piket':
-        dashboard = '/dashboard/guru-piket';
-        break;
-      case 'osis':
-        dashboard = '/dashboard/osis';
-        break;
-      default:
-        dashboard = '/dashboard';
-    }
-
     res.status(200).json({
       message: 'Login berhasil',
       token,
-      role: user.role,
-      redirect: dashboard,
+      role: user.role
     });
 
   } catch (err) {
