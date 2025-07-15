@@ -14,8 +14,13 @@ const app = express();
 app.use(express.json());
 app.use(middlewareLogRequest);
 
+<<<<<<< HEAD
 
 app.use('/api/siswa', siswaRoute);
+=======
+app.use('/users', userRoute);
+app.use('/api/students', siswaRoute);
+>>>>>>> d19e81286ea10feace4256f98044584aa5c41317
 app.use('/api/auth', authRoute);
 app.use('/api/dashboard', dashboardRoute);
 
@@ -25,6 +30,11 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoute);
 
+<<<<<<< HEAD
+=======
+app.use('/api/students', siswaRoute);
+
+>>>>>>> d19e81286ea10feace4256f98044584aa5c41317
 app.get('/name', (req, res) => {
     res.json({
         nama: 'azra',

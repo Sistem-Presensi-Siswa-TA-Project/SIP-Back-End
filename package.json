@@ -17,8 +17,12 @@
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< HEAD
     "mysql2": "^3.14.2",
     "nanoid": "^3.3.6"
+=======
+    "mysql2": "^3.14.2"
+>>>>>>> d19e81286ea10feace4256f98044584aa5c41317
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
