@@ -1,0 +1,124 @@
+const pool = require('../config/databaseConfig');
+const { nanoid } = require('nanoid');
+const bcrypt = require('bcryptjs');
+
+// GET: Menampilkan semua user
+exports.getAllUsers = async (req, res) => {
+    try {
+        const [rows] = await pool.execute('SELECT id_user, username, role FROM User');
+        res.status(200).json({
+            message: 'Berhasil mengambil semua data user',
+            data: rows
+        });
+    } catch (error) {
+        console.error('Gagal mengambil user:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat mengambil data user',
+            error: error.message
+        });
+    }
+};
+
+// POST: Menambahkan user baru
+exports.createUser = async (req, res) => {
+    const { username, role } = req.body;
+
+    if (!username || !role) {
+        return res.status(400).json({
+            message: 'Username dan role wajib diisi.'
+        });
+    }
+
+    const id_user = 'U-' + nanoid(6); 
+    const defaultPassword = '123456';
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
+    try {
+        const [result] = await pool.execute(
+            'INSERT INTO User (id_user, username, password, role) VALUES (?, ?, ?, ?)',
+            [id_user, username, hashedPassword, role]
+        );
+
+        res.status(201).json({
+            message: 'User berhasil ditambahkan',
+            id_user,
+            password_default: defaultPassword
+        });
+    } catch (error) {
+        console.error('Gagal menambahkan user:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({
+                message: 'Username atau ID sudah digunakan.',
+                error: error.message
+            });
+        }
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat menambahkan user',
+            error: error.message
+        });
+    }
+};
+
+// PUT: Mengupdate user
+exports.updateUser = async (req, res) => {
+    const { id_user } = req.params;
+    const { username, role } = req.body;
+
+    if (!username && !role) {
+        return res.status(400).json({
+            message: 'Tidak ada data yang diberikan untuk diperbarui.'
+        });
+    }
+
+    try {
+        const [result] = await pool.execute(
+            'UPDATE User SET username = ?, role = ? WHERE id_user = ?',
+            [username, role, id_user]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'User tidak ditemukan.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'User berhasil diperbarui',
+            id_user
+        });
+    } catch (error) {
+        console.error('Gagal memperbarui user:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat memperbarui user',
+            error: error.message
+        });
+    }
+};
+
+// DELETE: Hapus user
+exports.deleteUser = async (req, res) => {
+    const { id_user } = req.params;
+
+    try {
+        const [result] = await pool.execute(
+            'DELETE FROM User WHERE id_user = ?',
+            [id_user]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'User tidak ditemukan.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'User berhasil dihapus'
+        });
+    } catch (error) {
+        console.error('Gagal menghapus user:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat menghapus user',
+            error: error.message
+        });
+    }
+};
