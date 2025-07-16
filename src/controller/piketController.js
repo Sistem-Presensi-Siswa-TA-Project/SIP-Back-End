@@ -18,7 +18,7 @@ exports.getAllPiket = async (req, res) => {
   }
 };
 
-// GET piket by id
+// GET piket by ID
 exports.getPiketById = async (req, res) => {
   const { id_piket } = req.params;
   try {
@@ -35,62 +35,43 @@ exports.getPiketById = async (req, res) => {
 
 // POST: tambah piket
 exports.createPiket = async (req, res) => {
-  const { identitas, kode_piket } = req.body;
+  const { nomor_induk, kode_piket, status } = req.body;
 
-  if (!identitas || !kode_piket) {
-    return res.status(400).json({ message: 'NIP/NISN dan kode_piket wajib diisi' });
+  if (!nomor_induk || !kode_piket || !status) {
+    return res.status(400).json({
+      message: 'nomor_induk, kode_piket, dan status wajib diisi'
+    });
   }
 
-  let id_user;
-  let status;
+  const allowedStatus = ['guru', 'osis'];
+  if (!allowedStatus.includes(status.toLowerCase())) {
+    return res.status(400).json({
+      message: 'Status hanya boleh bernilai "guru" atau "osis"'
+    });
+  }
 
   try {
-    // Cek di Guru (NIP)
+    // Cek apakah nomor_induk ada di Guru atau Siswa
     const [guruRows] = await pool.execute(
       'SELECT nomor_induk FROM Guru WHERE nomor_induk = ?',
-      [identitas]
+      [nomor_induk]
     );
 
-    if (guruRows.length > 0) {
-      // Cek user dengan username = NIP
-      const [userRows] = await pool.execute(
-        'SELECT id_user FROM User WHERE username = ?',
-        [identitas]
-      );
-      if (userRows.length === 0) {
-        return res.status(404).json({ message: 'User guru dengan identitas tersebut tidak ditemukan' });
-      }
-      id_user = userRows[0].id_user;
-      status = 'guru';
-    } else {
-      // Cek di Siswa (NISN)
+    if (guruRows.length === 0) {
       const [siswaRows] = await pool.execute(
         'SELECT nisn FROM Siswa WHERE nisn = ?',
-        [identitas]
+        [nomor_induk]
       );
-
       if (siswaRows.length === 0) {
-        return res.status(404).json({ message: 'Identitas tidak ditemukan di Guru maupun Siswa' });
+        return res.status(404).json({ message: 'nomor_induk tidak ditemukan di Guru maupun Siswa' });
       }
-
-      const [userRows] = await pool.execute(
-        'SELECT id_user FROM User WHERE username = ?',
-        [identitas]
-      );
-
-      if (userRows.length === 0) {
-        return res.status(404).json({ message: 'User siswa dengan identitas tersebut tidak ditemukan' });
-      }
-
-      id_user = userRows[0].id_user;
-      status = 'osis';
     }
 
-    const id_piket = 'PK_' + nanoid(6);
+    const id_piket = 'PK-' + nanoid(6);
 
-    const [insertResult] = await pool.execute(
-      'INSERT INTO Piket (id_piket, id_user, kode_piket, status) VALUES (?, ?, ?, ?)',
-      [id_piket, id_user, kode_piket, status]
+    await pool.execute(
+      'INSERT INTO Piket (id_piket, nomor_induk, kode_piket, status) VALUES (?, ?, ?, ?)',
+      [id_piket, nomor_induk, kode_piket, status.toLowerCase()]
     );
 
     res.status(201).json({
@@ -100,19 +81,35 @@ exports.createPiket = async (req, res) => {
 
   } catch (error) {
     console.error('Gagal menambahkan piket:', error);
-    res.status(500).json({ message: 'Terjadi kesalahan saat menambahkan piket', error: error.message });
+    res.status(500).json({
+      message: 'Terjadi kesalahan saat menambahkan piket',
+      error: error.message
+    });
   }
 };
 
 // PUT: update piket
 exports.updatePiket = async (req, res) => {
   const { id_piket } = req.params;
-  const { id_user, kode_piket, status } = req.body;
+  const { nomor_induk, kode_piket, status } = req.body;
+
+  if (!nomor_induk || !kode_piket || !status) {
+    return res.status(400).json({
+      message: 'nomor_induk, kode_piket, dan status wajib diisi'
+    });
+  }
+
+  const allowedStatus = ['guru', 'osis'];
+  if (!allowedStatus.includes(status.toLowerCase())) {
+    return res.status(400).json({
+      message: 'Status hanya boleh bernilai "guru" atau "osis"'
+    });
+  }
 
   try {
     const [result] = await pool.execute(
-      'UPDATE Piket SET id_user = ?, kode_piket = ?, status = ? WHERE id_piket = ?',
-      [id_user, kode_piket, status, id_piket]
+      'UPDATE Piket SET nomor_induk = ?, kode_piket = ?, status = ? WHERE id_piket = ?',
+      [nomor_induk, kode_piket, status.toLowerCase(), id_piket]
     );
 
     if (result.affectedRows === 0) {
@@ -125,11 +122,14 @@ exports.updatePiket = async (req, res) => {
     });
   } catch (error) {
     console.error('Gagal update piket:', error);
-    res.status(500).json({ message: 'Terjadi kesalahan saat memperbarui piket', error: error.message });
+    res.status(500).json({
+      message: 'Terjadi kesalahan saat memperbarui piket',
+      error: error.message
+    });
   }
 };
 
-// DELETE piket
+// DELETE: hapus piket
 exports.deletePiket = async (req, res) => {
   const { id_piket } = req.params;
 
@@ -142,6 +142,9 @@ exports.deletePiket = async (req, res) => {
     res.status(200).json({ message: 'Piket berhasil dihapus' });
   } catch (error) {
     console.error('Gagal menghapus piket:', error);
-    res.status(500).json({ message: 'Terjadi kesalahan saat menghapus piket', error: error.message });
+    res.status(500).json({
+      message: 'Terjadi kesalahan saat menghapus piket',
+      error: error.message
+    });
   }
 };
