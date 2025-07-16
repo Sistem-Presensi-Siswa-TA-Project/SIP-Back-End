@@ -41,28 +41,48 @@ exports.createPiket = async (req, res) => {
     return res.status(400).json({ message: 'NIP/NISN dan kode_piket wajib diisi' });
   }
 
-  let id_user = 'U_' + nanoid(6); // buat ID user otomatis
+  let id_user;
   let status;
 
   try {
     // Cek di Guru (NIP)
     const [guruRows] = await pool.execute(
-      'SELECT id_guru FROM Guru WHERE nomor_induk = ?',
+      'SELECT nomor_induk FROM Guru WHERE nomor_induk = ?',
       [identitas]
     );
 
     if (guruRows.length > 0) {
+      // Cek user dengan username = NIP
+      const [userRows] = await pool.execute(
+        'SELECT id_user FROM User WHERE username = ?',
+        [identitas]
+      );
+      if (userRows.length === 0) {
+        return res.status(404).json({ message: 'User guru dengan identitas tersebut tidak ditemukan' });
+      }
+      id_user = userRows[0].id_user;
       status = 'guru';
     } else {
       // Cek di Siswa (NISN)
       const [siswaRows] = await pool.execute(
-        'SELECT id_siswa FROM Siswa WHERE nisn = ?',
+        'SELECT nisn FROM Siswa WHERE nisn = ?',
         [identitas]
       );
 
       if (siswaRows.length === 0) {
         return res.status(404).json({ message: 'Identitas tidak ditemukan di Guru maupun Siswa' });
       }
+
+      const [userRows] = await pool.execute(
+        'SELECT id_user FROM User WHERE username = ?',
+        [identitas]
+      );
+
+      if (userRows.length === 0) {
+        return res.status(404).json({ message: 'User siswa dengan identitas tersebut tidak ditemukan' });
+      }
+
+      id_user = userRows[0].id_user;
       status = 'osis';
     }
 
@@ -75,8 +95,7 @@ exports.createPiket = async (req, res) => {
 
     res.status(201).json({
       message: 'Piket berhasil ditambahkan',
-      id_piket,
-      status
+      id_piket
     });
 
   } catch (error) {
