@@ -48,13 +48,13 @@ exports.getGuruByNomorInduk = async (req, res) => {
 exports.createGuru = async (req, res) => {
   const {
     nama, jenis_kelamin, tempat_lahir, tanggal_lahir, agama, NIK, nomor_hp,
-    nomor_induk, NIP, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan,
+    nomor_induk, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan,
     kecamatan, kabupaten_kota, provinsi, kode_pos, email, rt, rw
   } = req.body;
 
-  if (!nama || !jenis_kelamin || !nomor_induk || !mata_pelajaran) {
+  if (!nama || !jenis_kelamin || !nomor_induk || !mata_pelajaran || !jabatan) {
     return res.status(400).json({
-      message: 'Kolom wajib (nama, jenis_kelamin, nomor_induk, mata_pelajaran) harus diisi.'
+      message: 'Kolom wajib (nama, jenis_kelamin, nomor_induk, mata_pelajaran, jabatan) harus diisi.'
     });
   }
 
@@ -64,12 +64,12 @@ exports.createGuru = async (req, res) => {
     const [result] = await pool.execute(
       `INSERT INTO Guru (
         id_guru, nama, jenis_kelamin, tempat_lahir, tanggal_lahir, agama, NIK, nomor_hp,
-        nomor_induk, NIP, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan, kecamatan,
+        nomor_induk, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan, kecamatan,
         kabupaten_kota, provinsi, kode_pos, email, rt, rw
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id_guru, nama, jenis_kelamin, tempat_lahir || null, tanggal_lahir || null, agama || null, NIK || null,
-        nomor_hp || null, nomor_induk, NIP || null, mata_pelajaran, jabatan || null, pendidikan || null,
+        nomor_hp || null, nomor_induk, mata_pelajaran, jabatan, pendidikan || null,
         alamat || null, kelurahan || null, kecamatan || null, kabupaten_kota || null,
         provinsi || null, kode_pos || null, email || null, rt || null, rw || null
       ]
@@ -93,7 +93,7 @@ exports.updateGuru = async (req, res) => {
   const { id_guru } = req.params;
   const {
     nama, jenis_kelamin, tempat_lahir, tanggal_lahir, agama, NIK, nomor_hp,
-    nomor_induk, NIP, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan,
+    nomor_induk, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan,
     kecamatan, kabupaten_kota, provinsi, kode_pos, email, rt, rw
   } = req.body;
 
@@ -101,12 +101,12 @@ exports.updateGuru = async (req, res) => {
     const [result] = await pool.execute(
       `UPDATE Guru SET 
         nama = ?, jenis_kelamin = ?, tempat_lahir = ?, tanggal_lahir = ?, agama = ?, NIK = ?, nomor_hp = ?,
-        nomor_induk = ?, NIP = ?, mata_pelajaran = ?, jabatan = ?, pendidikan = ?, alamat = ?, kelurahan = ?,
+        nomor_induk = ?, mata_pelajaran = ?, jabatan = ?, pendidikan = ?, alamat = ?, kelurahan = ?,
         kecamatan = ?, kabupaten_kota = ?, provinsi = ?, kode_pos = ?, email = ?, rt = ?, rw = ?
        WHERE id_guru = ?`,
       [
         nama, jenis_kelamin, tempat_lahir || null, tanggal_lahir || null, agama || null, NIK || null,
-        nomor_hp || null, nomor_induk, NIP || null, mata_pelajaran, jabatan || null, pendidikan || null,
+        nomor_hp || null, nomor_induk, mata_pelajaran, jabatan, pendidikan || null,
         alamat || null, kelurahan || null, kecamatan || null, kabupaten_kota || null,
         provinsi || null, kode_pos || null, email || null, rt || null, rw || null,
         id_guru

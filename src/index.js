@@ -11,6 +11,7 @@ const dashboardRoute = require('./routes/dashboardRoute.js');
 const middlewareLogRequest = require('./middleware/logs.js');
 const dbpool = require('./config/databaseConfig.js'); 
 const guruRoute = require('./routes/guruRoute');
+const piketRoute = require('./routes/piketRoute');
 
 const app = express();
 
@@ -41,15 +42,15 @@ app.use('/api/auth', authRoute);
 app.use('/api/dashboard', dashboardRoute);
 app.use('/api/users', userRoute);
 app.use('/api/guru', guruRoute);
+app.use('/api/piket', piketRoute)
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Presensi API Backend!');
 });
 
-app.get('/name', (req, res) => {
+app.get('/test', (req, res) => {
     res.json({
-        nama: 'azra',
-        email: 'azra@gmail.com'
+        respon: 'berhasil jalan',
     });
 });
 

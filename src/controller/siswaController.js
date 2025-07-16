@@ -98,19 +98,12 @@ exports.createSiswa = async (req, res) => {
         tempat_lahir,
         tanggal_lahir,
         nomor_hp,
-        asal_sekolah,
-        alamat,
-        kelurahan,
-        kecamatan,
-        kabupaten_kota,
-        provinsi,
-        kode_pos,
         kelas_gabungan
     } = req.body;
 
-    if (!nisn || !nama || !jenis_kelamin || !kelas_gabungan) {
+    if (!nisn || !nama || !jenis_kelamin || !kelas) {
         return res.status(400).json({
-            message: 'Kolom wajib (nisn, nama, jenis_kelamin, kelas_gabungan) harus diisi.'
+            message: 'Kolom wajib (nisn, nama, jenis_kelamin, kelas) harus diisi.'
         });
     }
 
@@ -120,15 +113,11 @@ exports.createSiswa = async (req, res) => {
         const [result] = await pool.execute(
             `INSERT INTO Siswa (
                 id_siswa, nisn, nama, jenis_kelamin, kelas,
-                tempat_lahir, tanggal_lahir, nomor_hp,
-                asal_sekolah, alamat, kelurahan, kecamatan,
-                kabupaten_kota, provinsi, kode_pos, kelas_gabungan
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                tempat_lahir, tanggal_lahir, nomor_hp, kelas_gabungan
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                id_siswa, nisn, nama, jenis_kelamin, kelas || null,
-                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null,
-                asal_sekolah || null, alamat || null, kelurahan || null, kecamatan || null,
-                kabupaten_kota || null, provinsi || null, kode_pos || null, kelas_gabungan
+                id_siswa, nisn, nama, jenis_kelamin, kelas,
+                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null, kelas_gabungan || null
             ]
         );
         res.status(201).json({
@@ -161,18 +150,10 @@ exports.updateSiswa = async (req, res) => {
         tempat_lahir,
         tanggal_lahir,
         nomor_hp,
-        asal_sekolah,
-        alamat,
-        kelurahan,
-        kecamatan,
-        kabupaten_kota,
-        provinsi,
-        kode_pos,
         kelas_gabungan
     } = req.body;
 
-    if (!nisn && !nama && !jenis_kelamin && !kelas && !tempat_lahir && !tanggal_lahir && !nomor_hp &&
-        !asal_sekolah && !alamat && !kelurahan && !kecamatan && !kabupaten_kota && !provinsi && !kode_pos && !kelas_gabungan) {
+    if (!nisn && !nama && !jenis_kelamin && !kelas && !tempat_lahir && !tanggal_lahir && !nomor_hp && !kelas_gabungan) {
         return res.status(400).json({
             message: 'Tidak ada data yang diberikan untuk diperbarui.'
         });
@@ -182,16 +163,12 @@ exports.updateSiswa = async (req, res) => {
         const [result] = await pool.execute(
             `UPDATE Siswa SET 
                 nisn = ?, nama = ?, jenis_kelamin = ?, kelas = ?,
-                tempat_lahir = ?, tanggal_lahir = ?, nomor_hp = ?,
-                asal_sekolah = ?, alamat = ?, kelurahan = ?, kecamatan = ?,
-                kabupaten_kota = ?, provinsi = ?, kode_pos = ?, kelas_gabungan = ?
+                tempat_lahir = ?, tanggal_lahir = ?, nomor_hp = ?, kelas_gabungan = ?
              WHERE id_siswa = ?`,
             [
-                nisn, nama, jenis_kelamin, kelas || null,
-                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null,
-                asal_sekolah || null, alamat || null, kelurahan || null, kecamatan || null,
-                kabupaten_kota || null, provinsi || null, kode_pos || null, kelas_gabungan || null,
-                id_siswa
+                nisn, nama, jenis_kelamin, kelas,
+                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null, 
+                kelas_gabungan || null, id_siswa
             ]
         );
 

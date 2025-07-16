@@ -19,6 +19,39 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
+// GET: Menampilkan user berdasarkan role
+exports.getUsersByRole = async (req, res) => {
+    const { role } = req.params;
+
+    if (!role) {
+        return res.status(400).json({
+            message: 'Role harus disertakan dalam parameter.'
+        });
+    }
+
+    try {
+        const [rows] = await pool.execute('SELECT id_user, username, role FROM User WHERE role = ?', [role]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                message: `Tidak ditemukan user dengan role '${role}'`
+            });
+        }
+
+        res.status(200).json({
+            message: `Berhasil mengambil user dengan role '${role}'`,
+            data: rows
+        });
+    } catch (error) {
+        console.error('Gagal mengambil user berdasarkan role:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat mengambil user',
+            error: error.message
+        });
+    }
+};
+
+
 // POST: Menambahkan user baru
 exports.createUser = async (req, res) => {
     const { username, role } = req.body;
