@@ -1,7 +1,7 @@
 const pool = require('../config/databaseConfig');
 const { nanoid } = require('nanoid');
 
-// GET semua data piket
+// GET semua piket
 exports.getAllPiket = async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM Piket');
@@ -18,7 +18,7 @@ exports.getAllPiket = async (req, res) => {
   }
 };
 
-// GET piket berdasarkan id_piket
+// GET piket by id
 exports.getPiketById = async (req, res) => {
   const { id_piket } = req.params;
   try {
@@ -33,91 +33,84 @@ exports.getPiketById = async (req, res) => {
   }
 };
 
-// POST tambah data piket
+// POST: tambah piket
 exports.createPiket = async (req, res) => {
-  const { identitas, status, kode_piket } = req.body;
+  const { identitas, kode_piket } = req.body;
 
-  if (!identitas || !status || !kode_piket) {
-    return res.status(400).json({ message: 'NIP/NISN, status, dan kode_piket wajib diisi' });
+  if (!identitas || !kode_piket) {
+    return res.status(400).json({ message: 'NIP/NISN dan kode_piket wajib diisi' });
   }
 
-  const id_piket = 'PK_' + nanoid(6);
-  let id_user;
+  let id_user = 'U_' + nanoid(6); // buat ID user otomatis
+  let status;
 
   try {
-    // Cek apakah user dengan role dan identitas (nisn atau nip) tersedia
-    const [result] = await pool.execute(
-      'SELECT id_user FROM User WHERE username = ? AND role = ?',
-      [identitas, status]
+    // Cek di Guru (NIP)
+    const [guruRows] = await pool.execute(
+      'SELECT id_guru FROM Guru WHERE nomor_induk = ?',
+      [identitas]
     );
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: `User dengan role ${status} dan identitas tersebut tidak ditemukan` });
+    if (guruRows.length > 0) {
+      status = 'guru';
+    } else {
+      // Cek di Siswa (NISN)
+      const [siswaRows] = await pool.execute(
+        'SELECT id_siswa FROM Siswa WHERE nisn = ?',
+        [identitas]
+      );
+
+      if (siswaRows.length === 0) {
+        return res.status(404).json({ message: 'Identitas tidak ditemukan di Guru maupun Siswa' });
+      }
+      status = 'osis';
     }
 
-    id_user = result[0].id_user;
+    const id_piket = 'PK_' + nanoid(6);
 
-    // Insert ke tabel Piket
-    await pool.execute(
+    const [insertResult] = await pool.execute(
       'INSERT INTO Piket (id_piket, id_user, kode_piket, status) VALUES (?, ?, ?, ?)',
       [id_piket, id_user, kode_piket, status]
     );
 
     res.status(201).json({
-      message: 'Data piket berhasil ditambahkan',
-      id_piket
+      message: 'Piket berhasil ditambahkan',
+      id_piket,
+      status
     });
 
   } catch (error) {
     console.error('Gagal menambahkan piket:', error);
-    res.status(500).json({
-      message: 'Terjadi kesalahan saat menambahkan piket',
-      error: error.message
-    });
+    res.status(500).json({ message: 'Terjadi kesalahan saat menambahkan piket', error: error.message });
   }
 };
 
-// PUT update data piket
+// PUT: update piket
 exports.updatePiket = async (req, res) => {
   const { id_piket } = req.params;
-  const { identitas, status, kode_piket } = req.body;
+  const { id_user, kode_piket, status } = req.body;
 
   try {
-    const [resultUser] = await pool.execute(
-      'SELECT id_user FROM User WHERE username = ? AND role = ?',
-      [identitas, status]
-    );
-
-    if (resultUser.length === 0) {
-      return res.status(404).json({ message: 'User tidak ditemukan berdasarkan identitas dan status' });
-    }
-
-    const id_user = resultUser[0].id_user;
-
     const [result] = await pool.execute(
       'UPDATE Piket SET id_user = ?, kode_piket = ?, status = ? WHERE id_piket = ?',
       [id_user, kode_piket, status, id_piket]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Data piket tidak ditemukan' });
+      return res.status(404).json({ message: 'Piket tidak ditemukan' });
     }
 
     res.status(200).json({
       message: 'Data piket berhasil diperbarui',
       id_piket
     });
-
   } catch (error) {
     console.error('Gagal update piket:', error);
-    res.status(500).json({
-      message: 'Terjadi kesalahan saat memperbarui piket',
-      error: error.message
-    });
+    res.status(500).json({ message: 'Terjadi kesalahan saat memperbarui piket', error: error.message });
   }
 };
 
-// DELETE hapus data piket
+// DELETE piket
 exports.deletePiket = async (req, res) => {
   const { id_piket } = req.params;
 
