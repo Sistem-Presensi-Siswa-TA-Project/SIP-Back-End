@@ -20,6 +20,6 @@ router.delete('/:id_user', userController.deleteUser);
 // DELETE user by id_user
 router.delete('/:id_user', userController.deleteUserById);
 // DELETE user by username
-router.delete('/:username', userController.deleteUserByUsername);
+router.delete('/username/:username', userController.deleteUserByUsername);
 
 module.exports = router;
