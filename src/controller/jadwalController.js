@@ -16,7 +16,7 @@ exports.createJadwal = async (req, res) => {
 
   try {
     // Cek apakah id_mapel ada
-    const [cekMapel] = await pool.execute('SELECT  FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
+    const [cekMapel] = await pool.execute('SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
     if (cekMapel.length === 0) return res.status(404).json({ message: 'ID Mapel tidak ditemukan' });
 
     // Cek apakah guru ada
