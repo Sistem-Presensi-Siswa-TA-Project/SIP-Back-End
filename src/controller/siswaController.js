@@ -20,7 +20,7 @@ exports.getAllSiswa = async (req, res) => {
 
 // GET siswa berdasarkan kelas
 exports.getSiswaByKelas = async (req, res) => {
-    const { kelas } = req.params;
+    const { kelas } = req.body;
 
     if (!kelas) {
         return res.status(400).json({
