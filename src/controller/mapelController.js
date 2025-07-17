@@ -64,7 +64,7 @@ exports.updateMapel = async (req, res) => {
     const mapelLama = rows[0];
 
     // Jika id mapel berubah, cek keunikan id mapel
-    if (id_mapel && id_mapel !== siswaLama.id_mapel) {
+    if (id_mapel && id_mapel !== mapelLama.id_mapel) {
         const [existing] = await pool.execute(
             "SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?",
             [id_mapel]
