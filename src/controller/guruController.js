@@ -136,6 +136,27 @@ exports.updateGuru = async (req, res) => {
   } = req.body;
 
   try {
+    // Ambil data guru lama
+    const [rows] = await pool.execute("SELECT * FROM Guru WHERE id_guru = ?", [id_guru]);
+    if (rows.length === 0) {
+        return res.status(404).json({ message: 'Guru dengan ID tersebut tidak ditemukan.' });
+    }
+    const guruLama = rows[0];
+
+    // Jika NISN berubah, cek keunikan NISN
+    if (nomor_induk && nomor_induk !== guruLama.nomor_induk) {
+        const [existing] = await pool.execute(
+            "SELECT * FROM Guru WHERE nomor_induk = ?",
+            [nomor_induk]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({
+                message: 'Guru dengan NIP tersebut sudah ada.'
+            });
+        }
+    }
+
+    // Lakukan update
     const [result] = await pool.execute(
       `UPDATE Guru SET 
         nama = ?, jenis_kelamin = ?, tempat_lahir = ?, tanggal_lahir = ?, agama = ?, NIK = ?, nomor_hp = ?,
