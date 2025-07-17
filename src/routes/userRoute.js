@@ -16,8 +16,6 @@ router.put('/:id_user', userController.updateUser);
 // PUT reset password by id_user
 router.put('/reset-password/:id_user', userController.resetPassword);
 // DELETE user by id_user
-router.delete('/:id_user', userController.deleteUser);
-// DELETE user by id_user
 router.delete('/:id_user', userController.deleteUserById);
 // DELETE user by username
 router.delete('/username/:username', userController.deleteUserByUsername);
