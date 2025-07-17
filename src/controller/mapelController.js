@@ -25,18 +25,18 @@ exports.getMapelById = async (req, res) => {
 // POST tambah mapel
 exports.createMapel = async (req, res) => {
   const { id_mapel, nama, deskripsi } = req.body;
-  if (!id_mapel || !nama) return res.status(400).json({ message: 'ID Mapel dan Nama wajib diisi' });
+  if (!id_mapel || !nama) return res.status(400).json({ message: 'ID Mata Pelajaran dan Nama wajib diisi' });
 
   try {
     // Cek apakah id mapel sudah ada
     const [existing] = await pool.execute(
-        "SELECT * FROM Mapel WHERE id_mapel = ?",
+        "SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?",
         [id_mapel]
     );
     
     if (existing.length > 0) {
         return res.status(409).json({
-            message: 'Mapel dengan ID tersebut sudah ada.'
+            message: 'Mata Pelajaran dengan ID tersebut sudah ada.'
         });
     } else {
       await pool.execute(
@@ -53,14 +53,37 @@ exports.createMapel = async (req, res) => {
 // PUT update mapel
 exports.updateMapel = async (req, res) => {
   const { id } = req.params;
-  const { nama, deskripsi } = req.body;
+  const { id_mapel, nama, deskripsi } = req.body;
 
   try {
+    // Ambil data mapel lama
+    const [rows] = await pool.execute("SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?", [id]);
+    if (rows.length === 0) {
+        return res.status(404).json({ message: 'Mata Pelajaran dengan ID tersebut tidak ditemukan.' });
+    }
+    const mapelLama = rows[0];
+
+    // Jika id mapel berubah, cek keunikan id mapel
+    if (id_mapel && id_mapel !== siswaLama.id_mapel) {
+        const [existing] = await pool.execute(
+            "SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?",
+            [id_mapel]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({
+                message: 'Mapel dengan ID tersebut sudah ada.'
+            });
+        }
+    }
+
+    // Lakukan Update
     const [result] = await pool.execute(
-      'UPDATE Mata_Pelajaran SET nama = ?, deskripsi = ? WHERE id_mapel = ?',
-      [nama, deskripsi, id]
+      'UPDATE Mata_Pelajaran SET id_mapel = ?, nama = ?, deskripsi = ? WHERE id_mapel = ?',
+      [id_mapel, nama, deskripsi, id]
     );
+    
     if (result.affectedRows === 0) return res.status(404).json({ message: 'Mapel tidak ditemukan' });
+    
     res.json({ message: 'Mapel berhasil diperbarui' });
   } catch (err) {
     res.status(500).json({ message: 'Gagal update mapel', error: err.message });
