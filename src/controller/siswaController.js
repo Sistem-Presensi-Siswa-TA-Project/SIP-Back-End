@@ -201,6 +201,27 @@ exports.updateSiswa = async (req, res) => {
     }
 
     try {
+        // Ambil data siswa lama
+        const [rows] = await pool.execute("SELECT * FROM Siswa WHERE id_siswa = ?", [id_siswa]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Siswa dengan ID tersebut tidak ditemukan.' });
+        }
+        const siswaLama = rows[0];
+
+        // Jika NISN berubah, cek keunikan NISN
+        if (nisn && nisn !== siswaLama.nisn) {
+            const [existing] = await pool.execute(
+                "SELECT * FROM Siswa WHERE nisn = ?",
+                [nisn]
+            );
+            if (existing.length > 0) {
+                return res.status(409).json({
+                    message: 'Siswa dengan NISN tersebut sudah ada.'
+                });
+            }
+        }
+
+        // Lakukan update
         const [result] = await pool.execute(
             `UPDATE Siswa SET 
                 nisn = ?, nama = ?, jenis_kelamin = ?, kelas = ?,
@@ -208,7 +229,7 @@ exports.updateSiswa = async (req, res) => {
              WHERE id_siswa = ?`,
             [
                 nisn, nama, jenis_kelamin, kelas,
-                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null, 
+                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null,
                 kelas_gabungan || null, id_siswa
             ]
         );
