@@ -13,6 +13,8 @@ router.get('/:id_user', userController.getUserById);
 router.post('/', formParser, userController.createUser);
 // PUT update user by id_user
 router.put('/:id_user', userController.updateUser);
+// PUT reset password by id_user
+router.put('/reset-password/:id_user', userController.resetPassword);
 // DELETE user by id_user
 router.delete('/:id_user', userController.deleteUser);
 
