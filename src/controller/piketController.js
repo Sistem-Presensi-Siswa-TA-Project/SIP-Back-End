@@ -43,10 +43,10 @@ exports.createPiket = async (req, res) => {
     });
   }
 
-  const allowedStatus = ['guru', 'osis'];
+  const allowedStatus = ['Guru', 'OSIS'];
   if (!allowedStatus.includes(status.toLowerCase())) {
     return res.status(400).json({
-      message: 'Status hanya boleh bernilai "guru" atau "osis"'
+      message: 'Status hanya boleh bernilai "Guru" atau "OSIS!"'
     });
   }
 
