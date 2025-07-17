@@ -45,7 +45,7 @@ exports.getGuruByNomorInduk = async (req, res) => {
 };
 
 // GET guru berdasarkan id
-exports.getGuruByNomorInduk = async (req, res) => {
+exports.getGuruById = async (req, res) => {
   const { idGuru } = req.params;
 
   try {
