@@ -6,7 +6,7 @@ const formParser = require('../middleware/formParser'); // <== baru
 // GET all users
 router.get('/', userController.getAllUsers);
 //GET all users by role
-router.get('/role/:role', userController.getUsersByRole);
+router.get('/role/:role', userController.getUserByRole);
 //GET user by id
 router.get('/:id_user', userController.getUserById);
 // POST new user
