@@ -28,11 +28,23 @@ exports.createMapel = async (req, res) => {
   if (!id_mapel || !nama) return res.status(400).json({ message: 'ID Mapel dan Nama wajib diisi' });
 
   try {
-    await pool.execute(
-      'INSERT INTO Mata_Pelajaran (id_mapel, nama, deskripsi) VALUES (?, ?, ?)',
-      [id_mapel, nama, deskripsi]
+    // Cek apakah id mapel sudah ada
+    const [existing] = await pool.execute(
+        "SELECT * FROM Mapel WHERE id_mapel = ?",
+        [id_mapel]
     );
-    res.status(201).json({ message: 'Mapel berhasil ditambahkan' });
+    
+    if (existing.length > 0) {
+        return res.status(409).json({
+            message: 'Mapel dengan ID tersebut sudah ada.'
+        });
+    } else {
+      await pool.execute(
+        'INSERT INTO Mata_Pelajaran (id_mapel, nama, deskripsi) VALUES (?, ?, ?)',
+        [id_mapel, nama, deskripsi]
+      );
+      res.status(201).json({ message: 'Mapel berhasil ditambahkan' });
+    }
   } catch (err) {
     res.status(500).json({ message: 'Gagal tambah mapel', error: err.message });
   }
