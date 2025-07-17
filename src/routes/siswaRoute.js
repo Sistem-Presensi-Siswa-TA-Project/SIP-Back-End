@@ -13,6 +13,9 @@ router.get('/kelas/:kelas', siswaController.getSiswaByKelas);
 // GET siswa berdasarkan NISN
 router.get('/nisn/:nisn', siswaController.getSiswaByNisn);
 
+// GET siswa berdasarkan NISN
+router.get('/id-siswa/:id_siswa', guruController.getSiswaById);
+
 // POST tambah siswa
 router.post('/', formParser, siswaController.createSiswa);
 
