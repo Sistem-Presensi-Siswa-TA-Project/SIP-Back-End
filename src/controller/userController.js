@@ -226,14 +226,42 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
-// DELETE: Hapus user
-exports.deleteUser = async (req, res) => {
+// DELETE: Hapus user by id
+exports.deleteUserById = async (req, res) => {
     const { id_user } = req.params;
 
     try {
         const [result] = await pool.execute(
             'DELETE FROM User WHERE id_user = ?',
             [id_user]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'User tidak ditemukan.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'User berhasil dihapus'
+        });
+    } catch (error) {
+        console.error('Gagal menghapus user:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat menghapus user',
+            error: error.message
+        });
+    }
+};
+
+// DELETE: Hapus user by username
+exports.deleteUserByUsername = async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const [result] = await pool.execute(
+            'DELETE FROM User WHERE username = ?',
+            [username]
         );
 
         if (result.affectedRows === 0) {
