@@ -155,7 +155,7 @@ exports.createSiswa = async (req, res) => {
             });
         } else {
             // Jika belum ada, lakukan insert
-            const id_siswa = 'S-' + nanoid(6);
+            const id_siswa = 'S-' + nanoid(12);
             await pool.execute(
                 `INSERT INTO Siswa (
                     id_siswa, nisn, nama, jenis_kelamin, kelas,
