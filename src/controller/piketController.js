@@ -75,7 +75,7 @@ exports.createPiket = async (req, res) => {
 
       await pool.execute(
         'INSERT INTO Piket (id_piket, nomor_induk, kode_piket, status) VALUES (?, ?, ?, ?)',
-        [id_piket, nomor_induk, kode_piket, status.toLowerCase()]
+        [id_piket, nomor_induk, kode_piket, status]
       );
   
       res.status(201).json({
@@ -103,17 +103,10 @@ exports.updatePiket = async (req, res) => {
     });
   }
 
-  const allowedStatus = ['guru', 'osis'];
-  if (!allowedStatus.includes(status.toLowerCase())) {
-    return res.status(400).json({
-      message: 'Status hanya boleh bernilai "guru" atau "osis"'
-    });
-  }
-
   try {
     const [result] = await pool.execute(
       'UPDATE Piket SET nomor_induk = ?, kode_piket = ?, status = ? WHERE id_piket = ?',
-      [nomor_induk, kode_piket, status.toLowerCase(), id_piket]
+      [nomor_induk, kode_piket, status, id_piket]
     );
 
     if (result.affectedRows === 0) {
