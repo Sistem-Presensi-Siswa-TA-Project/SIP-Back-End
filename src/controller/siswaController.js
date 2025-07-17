@@ -90,9 +90,9 @@ exports.getSiswaByNisn = async (req, res) => {
 
 // GET siswa berdasarkan id
 exports.getSiswaById = async (req, res) => {
-    const { idSiswa } = req.params;
+    const { id_siswa } = req.params;
 
-    if (!idSiswa) {
+    if (!id_siswa) {
         return res.status(400).json({
             message: 'Id Siswa harus disertakan.'
         });
@@ -101,7 +101,7 @@ exports.getSiswaById = async (req, res) => {
     try {
         const [rows] = await pool.execute(
             'SELECT * FROM Siswa WHERE id_siswa = ?',
-            [idSiswa]
+            [id_siswa]
         );
 
         if (rows.length === 0) {
