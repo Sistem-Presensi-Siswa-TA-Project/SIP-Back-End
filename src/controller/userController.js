@@ -20,7 +20,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // GET: Menampilkan user berdasarkan role
-exports.getUsersByRole = async (req, res) => {
+exports.getUserByRole = async (req, res) => {
     const { role } = req.params;
 
     if (!role) {
