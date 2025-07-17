@@ -106,7 +106,7 @@ exports.createUser = async (req, res) => {
         
         if (existing.length > 0) {
             return res.status(409).json({
-                message: 'User dengan username tersebut sudah ada.'
+                message: 'User dengan username tersebut telah terdaftar!'
             });
         } else {
             const [result] = await pool.execute(
