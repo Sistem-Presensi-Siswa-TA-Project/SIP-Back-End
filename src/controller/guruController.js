@@ -143,7 +143,7 @@ exports.updateGuru = async (req, res) => {
     }
     const guruLama = rows[0];
 
-    // Jika NISN berubah, cek keunikan NISN
+    // Jika Nomor Induk berubah, cek keunikan Nomor Induk
     if (nomor_induk && nomor_induk !== guruLama.nomor_induk) {
         const [existing] = await pool.execute(
             "SELECT * FROM Guru WHERE nomor_induk = ?",
