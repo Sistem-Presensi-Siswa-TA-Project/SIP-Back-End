@@ -5,6 +5,9 @@ const jadwalController = require('../controller/jadwalController');
 // GET semua jadwal
 router.get('/', jadwalController.getAllJadwal);
 
+//GET jadwal berdasarkan id 
+router.get('/:id', jadwalController.getJadwalById);
+
 // POST tambah jadwal (dengan pengecekan mapel dan guru)
 router.post('/', jadwalController.createJadwal);
 
