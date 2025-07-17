@@ -7,11 +7,12 @@ dotenv.config();
 const userRoute = require('./routes/userRoute.js');
 const siswaRoute = require('./routes/siswaRoute.js');
 const authRoute = require('./routes/authRoute.js');
-const dashboardRoute = require('./routes/dashboardRoute.js');
 const middlewareLogRequest = require('./middleware/logs.js');
 const dbpool = require('./config/databaseConfig.js'); 
 const guruRoute = require('./routes/guruRoute');
 const piketRoute = require('./routes/piketRoute');
+const mapelRoute = require('./routes/mapelRoute');
+const jadwalRoute = require('./routes/jadwalRoute');
 
 const app = express();
 
@@ -39,10 +40,11 @@ app.set('view engine', 'ejs');
 
 app.use('/api/siswa', siswaRoute);
 app.use('/api/auth', authRoute);
-app.use('/api/dashboard', dashboardRoute);
 app.use('/api/users', userRoute);
 app.use('/api/guru', guruRoute);
 app.use('/api/piket', piketRoute)
+app.use('/api/mapel', mapelRoute);
+app.use('/api/jadwal', jadwalRoute);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Presensi API Backend!');
