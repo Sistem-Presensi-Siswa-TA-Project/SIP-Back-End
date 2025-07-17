@@ -16,7 +16,7 @@ exports.createJadwal = async (req, res) => {
 
   try {
     // Cek apakah id_mapel ada
-    const [cekMapel] = await pool.execute('SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
+    const [cekMapel] = await pool.execute('SELECT  FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
     if (cekMapel.length === 0) return res.status(404).json({ message: 'ID Mapel tidak ditemukan' });
 
     // Cek apakah guru ada
@@ -43,6 +43,24 @@ exports.getAllJadwal = async (req, res) => {
     res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
   }
 };
+
+// GET jadwal by ID
+exports.getJadwalById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE id_jadwal = ?', [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
+    }
+
+    res.json({ message: 'Jadwal ditemukan', data: rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
+  }
+};
+
 
 // PUT update jadwal
 exports.updateJadwal = async (req, res) => {
