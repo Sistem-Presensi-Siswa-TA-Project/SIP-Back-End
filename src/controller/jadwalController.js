@@ -1,0 +1,83 @@
+const pool = require('../config/databaseConfig');
+const {nanoid} = require('nanoid');
+
+// POST: Tambah Jadwal
+exports.createJadwal = async (req, res) => {
+  let { id_jadwal, id_mapel, nomor_induk_guru, hari, waktu, kelas, tahun_ajaran, semester } = req.body;
+
+  // Generate id_jadwal jika tidak ada
+  if (!id_jadwal) {
+    id_jadwal = `J-${nanoid(12)}`; 
+  }
+
+  if (!id_mapel || !nomor_induk_guru || !hari || !waktu || !kelas || !tahun_ajaran || !semester) {
+    return res.status(400).json({ message: 'Semua field wajib diisi' });
+  }
+
+  try {
+    // Cek apakah id_mapel ada
+    const [cekMapel] = await pool.execute('SELECT id_mapel FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
+    if (cekMapel.length === 0) return res.status(404).json({ message: 'ID Mapel tidak ditemukan' });
+
+    // Cek apakah guru ada
+    const [cekGuru] = await pool.execute('SELECT nomor_induk FROM Guru WHERE nomor_induk = ?', [nomor_induk_guru]);
+    if (cekGuru.length === 0) return res.status(404).json({ message: 'Guru tidak ditemukan' });
+
+    await pool.execute(
+      'INSERT INTO Jadwal (id_jadwal, id_mapel, nomor_induk_guru, hari, waktu, kelas, tahun_ajaran, semester) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [id_jadwal, id_mapel, nomor_induk_guru, hari, waktu, kelas, tahun_ajaran, semester]
+    );
+
+    res.status(201).json({ message: 'Jadwal berhasil ditambahkan', id_jadwal });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal menambahkan jadwal', error: err.message });
+  }
+};
+
+// GET semua jadwal
+exports.getAllJadwal = async (req, res) => {
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Jadwal');
+    res.json({ message: 'Data jadwal berhasil diambil', data: rows });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
+  }
+};
+
+// PUT update jadwal
+exports.updateJadwal = async (req, res) => {
+  const { id } = req.params;
+  const { id_mapel, nomor_induk_guru, hari, waktu, kelas, tahun_ajaran, semester } = req.body;
+
+  try {
+    // Cek mapel dan guru
+    const [cekMapel] = await pool.execute('SELECT id_mapel FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
+    if (cekMapel.length === 0) return res.status(404).json({ message: 'ID Mapel tidak ditemukan' });
+
+    const [cekGuru] = await pool.execute('SELECT nomor_induk FROM Guru WHERE nomor_induk = ?', [nomor_induk_guru]);
+    if (cekGuru.length === 0) return res.status(404).json({ message: 'Guru tidak ditemukan' });
+
+    const [result] = await pool.execute(
+      'UPDATE Jadwal SET id_mapel = ?, nomor_induk_guru = ?, hari = ?, waktu = ?, kelas = ?, tahun_ajaran = ?, semester = ? WHERE id_jadwal = ?',
+      [id_mapel, nomor_induk_guru, hari, waktu, kelas, tahun_ajaran, semester, id]
+    );
+
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
+
+    res.json({ message: 'Jadwal berhasil diperbarui' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal update jadwal', error: err.message });
+  }
+};
+
+// DELETE jadwal
+exports.deleteJadwal = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await pool.execute('DELETE FROM Jadwal WHERE id_jadwal = ?', [id]);
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
+    res.json({ message: 'Jadwal berhasil dihapus' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus jadwal', error: err.message });
+  }
+};
