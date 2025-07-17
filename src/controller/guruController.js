@@ -84,7 +84,7 @@ exports.createGuru = async (req, res) => {
     });
   }
 
-  const id_guru = 'G-' + nanoid(6);
+  const id_guru = 'G-' + nanoid(12);
 
   try {
      // Cek apakah NISN sudah ada
