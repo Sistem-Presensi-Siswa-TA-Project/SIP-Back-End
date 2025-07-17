@@ -43,13 +43,6 @@ exports.createPiket = async (req, res) => {
     });
   }
 
-  const allowedStatus = ['Guru', 'OSIS'];
-  if (!allowedStatus.includes(status.toLowerCase())) {
-    return res.status(400).json({
-      message: 'Status hanya boleh bernilai "Guru" atau "OSIS!"'
-    });
-  }
-
   try {
     // Cek apakah nomor_induk ada di Guru atau Siswa
     const [guruRows] = await pool.execute(
