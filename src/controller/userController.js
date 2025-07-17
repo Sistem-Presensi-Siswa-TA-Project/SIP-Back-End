@@ -52,7 +52,7 @@ exports.getUsersByRole = async (req, res) => {
 };
 
 // GET: Menampilkan user berdasarkan id
-exports.getUsersById = async (req, res) => {
+exports.getUserById = async (req, res) => {
     const { id_user } = req.params;
 
     if (!id_user) {
