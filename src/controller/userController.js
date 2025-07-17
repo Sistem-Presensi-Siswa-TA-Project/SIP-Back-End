@@ -154,7 +154,7 @@ exports.updateUser = async (req, res) => {
         }
         const userLama = rows[0];
         
-        // Jika NISN berubah, cek keunikan NISN
+        // Jika username berubah, cek keunikan username
         if (username && username !== userLama.username) {
             const [existing] = await pool.execute(
                 "SELECT * FROM User WHERE username = ?",
@@ -182,6 +182,40 @@ exports.updateUser = async (req, res) => {
         res.status(200).json({
             message: 'User berhasil diperbarui',
             id_user
+        });
+    } catch (error) {
+        console.error('Gagal memperbarui user:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat memperbarui user',
+            error: error.message
+        });
+    }
+};
+
+// PUT: Reset Password
+exports.resetPassword = async (req, res) => {
+    const { id_user } = req.params;
+    
+    const defaultPassword = 'smpbabussalam';
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+    
+    try {        
+        // Lakukan update
+        const [result] = await pool.execute(
+            'UPDATE User SET password = ? WHERE id_user = ?',
+            [hashedPassword, id_user]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'User tidak ditemukan.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'User berhasil diperbarui',
+            id_user,
+            password_default: defaultPassword
         });
     } catch (error) {
         console.error('Gagal memperbarui user:', error);
