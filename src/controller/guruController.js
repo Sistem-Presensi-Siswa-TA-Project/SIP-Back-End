@@ -44,6 +44,32 @@ exports.getGuruByNomorInduk = async (req, res) => {
   }
 };
 
+// GET guru berdasarkan id
+exports.getGuruByNomorInduk = async (req, res) => {
+  const { idGuru } = req.params;
+
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Guru WHERE id_guru = ?', [idGuru]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: 'Guru dengan id tersebut tidak ditemukan.'
+      });
+    }
+
+    res.status(200).json({
+      message: 'Berhasil mengambil data guru',
+      data: rows[0]
+    });
+  } catch (error) {
+    console.error('Gagal mengambil data guru:', error);
+    res.status(500).json({
+      message: 'Terjadi kesalahan saat mengambil data guru',
+      error: error.message
+    });
+  }
+};
+
 // POST: Tambah guru
 exports.createGuru = async (req, res) => {
   const {
@@ -61,24 +87,36 @@ exports.createGuru = async (req, res) => {
   const id_guru = 'G-' + nanoid(6);
 
   try {
-    const [result] = await pool.execute(
-      `INSERT INTO Guru (
-        id_guru, nama, jenis_kelamin, tempat_lahir, tanggal_lahir, agama, NIK, nomor_hp,
-        nomor_induk, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan, kecamatan,
-        kabupaten_kota, provinsi, kode_pos, email, rt, rw
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        id_guru, nama, jenis_kelamin, tempat_lahir || null, tanggal_lahir || null, agama || null, NIK || null,
-        nomor_hp || null, nomor_induk, mata_pelajaran, jabatan, pendidikan || null,
-        alamat || null, kelurahan || null, kecamatan || null, kabupaten_kota || null,
-        provinsi || null, kode_pos || null, email || null, rt || null, rw || null
-      ]
+     // Cek apakah NISN sudah ada
+    const [existing] = await pool.execute(
+        "SELECT 1 FROM Siswa WHERE nisn = ? LIMIT 1",
+        [nisn]
     );
-
-    res.status(201).json({
-      message: 'Data guru berhasil ditambahkan',
-      id_guru
-    });
+    
+    if (existing.length > 0) {
+        return res.status(409).json({
+            message: 'Siswa dengan NISN tersebut sudah ada.'
+        });
+    } else {
+      const [result] = await pool.execute(
+        `INSERT INTO Guru (
+          id_guru, nama, jenis_kelamin, tempat_lahir, tanggal_lahir, agama, NIK, nomor_hp,
+          nomor_induk, mata_pelajaran, jabatan, pendidikan, alamat, kelurahan, kecamatan,
+          kabupaten_kota, provinsi, kode_pos, email, rt, rw
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          id_guru, nama, jenis_kelamin, tempat_lahir || null, tanggal_lahir || null, agama || null, NIK || null,
+          nomor_hp || null, nomor_induk, mata_pelajaran, jabatan, pendidikan || null,
+          alamat || null, kelurahan || null, kecamatan || null, kabupaten_kota || null,
+          provinsi || null, kode_pos || null, email || null, rt || null, rw || null
+        ]
+      );
+  
+      res.status(201).json({
+        message: 'Data guru berhasil ditambahkan',
+        id_guru
+      });
+    }
   } catch (error) {
     console.error('Gagal menambahkan guru:', error);
     res.status(500).json({
