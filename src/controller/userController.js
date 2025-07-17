@@ -75,7 +75,39 @@ exports.getUserById = async (req, res) => {
             data: rows
         });
     } catch (error) {
-        console.error('Gagal mengambil user berdasarkan role:', error);
+        console.error('Gagal mengambil user berdasarkan id:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat mengambil user',
+            error: error.message
+        });
+    }
+};
+
+// GET: Menampilkan user berdasarkan username
+exports.getUserByUsername = async (req, res) => {
+    const { username } = req.params;
+
+    if (!username) {
+        return res.status(400).json({
+            message: 'Role harus disertakan dalam parameter.'
+        });
+    }
+
+    try {
+        const [rows] = await pool.execute('SELECT id_user, username, role FROM User WHERE username = ?', [username]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                message: `Tidak ditemukan user dengan username '${username}'`
+            });
+        }
+
+        res.status(200).json({
+            message: `Berhasil mengambil user dengan username '${username}'`,
+            data: rows
+        });
+    } catch (error) {
+        console.error('Gagal mengambil user berdasarkan username:', error);
         res.status(500).json({
             message: 'Terjadi kesalahan saat mengambil user',
             error: error.message
