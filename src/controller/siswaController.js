@@ -88,6 +88,41 @@ exports.getSiswaByNisn = async (req, res) => {
     }
 };
 
+// GET siswa berdasarkan id
+exports.getSiswaById = async (req, res) => {
+    const { idSiswa } = req.params;
+
+    if (!idSiswa) {
+        return res.status(400).json({
+            message: 'Id Siswa harus disertakan.'
+        });
+    }
+
+    try {
+        const [rows] = await pool.execute(
+            'SELECT * FROM Siswa WHERE id_siswa = ?',
+            [idSiswa]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                message: 'Tidak ditemukan siswa dengan id tersebut.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Berhasil mengambil data siswa berdasarkan id',
+            data: rows
+        });
+    } catch (error) {
+        console.error('Gagal mengambil data siswa berdasarkan id:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat mengambil data siswa',
+            error: error.message
+        });
+    }
+};
+
 // POST: Tambah siswa baru
 exports.createSiswa = async (req, res) => {
     const {
@@ -107,31 +142,37 @@ exports.createSiswa = async (req, res) => {
         });
     }
 
-    const id_siswa = 'S-' + nanoid(6);
-
     try {
-        const [result] = await pool.execute(
-            `INSERT INTO Siswa (
-                id_siswa, nisn, nama, jenis_kelamin, kelas,
-                tempat_lahir, tanggal_lahir, nomor_hp, kelas_gabungan
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-                id_siswa, nisn, nama, jenis_kelamin, kelas,
-                tempat_lahir || null, tanggal_lahir || null, nomor_hp || null, kelas_gabungan || null
-            ]
+        // Cek apakah NISN sudah ada
+        const [existing] = await pool.execute(
+            "SELECT * FROM Siswa WHERE nisn = ?",
+            [nisn]
         );
-        res.status(201).json({
-            message: 'Data siswa berhasil ditambahkan',
-            id_siswa
-        });
-    } catch (error) {
-        console.error('Gagal menambahkan siswa:', error);
-        if (error.code === 'ER_DUP_ENTRY') {
+        
+        if (existing.length > 0) {
             return res.status(409).json({
-                message: 'Siswa dengan NISN tersebut sudah ada.',
-                error: error.message
+                message: 'Siswa dengan NISN tersebut sudah ada.'
+            });
+        } else {
+            // Jika belum ada, lakukan insert
+            const id_siswa = 'S-' + nanoid(6);
+            await pool.execute(
+                `INSERT INTO Siswa (
+                    id_siswa, nisn, nama, jenis_kelamin, kelas,
+                    tempat_lahir, tanggal_lahir, nomor_hp, kelas_gabungan
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    id_siswa, nisn, nama, jenis_kelamin, kelas,
+                    tempat_lahir || null, tanggal_lahir || null, nomor_hp || null, kelas_gabungan || null
+                ]
+            );
+            res.status(201).json({
+                message: 'Data siswa berhasil ditambahkan',
+                id_siswa
             });
         }
+    } catch (error) {
+        console.error('Gagal menambahkan siswa:', error);
         res.status(500).json({
             message: 'Terjadi kesalahan saat menambahkan siswa',
             error: error.message
