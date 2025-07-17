@@ -62,23 +62,34 @@ exports.createPiket = async (req, res) => {
         'SELECT nisn FROM Siswa WHERE nisn = ?',
         [nomor_induk]
       );
+      
       if (siswaRows.length === 0) {
-        return res.status(404).json({ message: 'nomor_induk tidak ditemukan di Guru maupun Siswa' });
+        return res.status(404).json({ message: 'Nomor Induk tidak ditemukan di Guru maupun Siswa' });
       }
     }
 
-    const id_piket = 'PK-' + nanoid(6);
-
-    await pool.execute(
-      'INSERT INTO Piket (id_piket, nomor_induk, kode_piket, status) VALUES (?, ?, ?, ?)',
-      [id_piket, nomor_induk, kode_piket, status.toLowerCase()]
+    // Cek apakah kode piket sudah ada
+    const [existing] = await pool.execute(
+        "SELECT * FROM Piket WHERE kode_piket = ?",
+        [kode_piket]
     );
+    if (existing.length > 0) {
+        return res.status(409).json({
+            message: 'Kode piket telah terdaftar.'
+        });
+    } else {
+      const id_piket = 'PK-' + nanoid(12);
 
-    res.status(201).json({
-      message: 'Piket berhasil ditambahkan',
-      id_piket
-    });
-
+      await pool.execute(
+        'INSERT INTO Piket (id_piket, nomor_induk, kode_piket, status) VALUES (?, ?, ?, ?)',
+        [id_piket, nomor_induk, kode_piket, status.toLowerCase()]
+      );
+  
+      res.status(201).json({
+        message: 'Piket berhasil ditambahkan',
+        id_piket
+      });
+    }
   } catch (error) {
     console.error('Gagal menambahkan piket:', error);
     res.status(500).json({
