@@ -213,7 +213,7 @@ exports.resetPassword = async (req, res) => {
         }
 
         res.status(200).json({
-            message: 'User berhasil diperbarui',
+            message: 'Password telah direset ke default "smpbabussalam"!',
             id_user,
             password_default: defaultPassword
         });
