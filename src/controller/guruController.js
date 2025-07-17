@@ -89,13 +89,13 @@ exports.createGuru = async (req, res) => {
   try {
      // Cek apakah NISN sudah ada
     const [existing] = await pool.execute(
-        "SELECT 1 FROM Siswa WHERE nisn = ? LIMIT 1",
-        [nisn]
+        "SELECT * FROM Guru WHERE nomor_induk = ?",
+        [nomor_induk]
     );
     
     if (existing.length > 0) {
         return res.status(409).json({
-            message: 'Siswa dengan NISN tersebut sudah ada.'
+            message: 'Guru dengan nomor induk tersebut telah terdaftar!'
         });
     } else {
       const [result] = await pool.execute(
