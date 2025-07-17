@@ -46,10 +46,10 @@ exports.getGuruByNomorInduk = async (req, res) => {
 
 // GET guru berdasarkan id
 exports.getGuruById = async (req, res) => {
-  const { idGuru } = req.params;
+  const { id_guru } = req.params;
 
   try {
-    const [rows] = await pool.execute('SELECT * FROM Guru WHERE id_guru = ?', [idGuru]);
+    const [rows] = await pool.execute('SELECT * FROM Guru WHERE id_guru = ?', [id_guru]);
 
     if (rows.length === 0) {
       return res.status(404).json({
