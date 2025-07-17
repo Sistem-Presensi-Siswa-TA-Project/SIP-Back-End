@@ -62,7 +62,7 @@ exports.createUser = async (req, res) => {
         });
     }
 
-    const id_user = 'U-' + nanoid(6); 
+    const id_user = 'U-' + nanoid(12); 
     const defaultPassword = 'smpbabussalam';
     const hashedPassword = await bcrypt.hash(defaultPassword, 10);
 
