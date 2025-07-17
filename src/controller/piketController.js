@@ -104,6 +104,40 @@ exports.updatePiket = async (req, res) => {
   }
 
   try {
+    // Ambil data guru lama
+    const [rows] = await pool.execute("SELECT * FROM Piket WHERE id_piket = ?", [id_piket]);
+    if (rows.length === 0) {
+        return res.status(404).json({ message: 'Piket dengan ID tersebut tidak ditemukan.' });
+    }
+    const piketLama = rows[0];
+
+    // Jika Nomor Induk berubah, cek keunikan Nomor Induk
+    if (kode_piket && kode_piket !== piketLama.kode_piket) {
+        const [existing] = await pool.execute(
+            "SELECT * FROM Piket WHERE kode_piket = ?",
+            [kode_piket]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({
+                message: 'Piket dengan kode tersebut telah terdaftar!'
+            });
+        }
+    }
+
+    // Jika Nomor Induk berubah, cek keunikan Nomor Induk
+    if (nomor_induk && nomor_induk !== piketLama.nomor_induk) {
+        const [existing] = await pool.execute(
+            "SELECT * FROM Piket WHERE nomor_induk = ?",
+            [nomor_induk]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({
+                message: 'Piket dengan nomor induk tersebut telah terdaftar!'
+            });
+        }
+    }
+
+    // Lakukan Update
     const [result] = await pool.execute(
       'UPDATE Piket SET nomor_induk = ?, kode_piket = ?, status = ? WHERE id_piket = ?',
       [nomor_induk, kode_piket, status, id_piket]
