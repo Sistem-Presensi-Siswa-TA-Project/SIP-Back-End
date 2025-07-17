@@ -98,16 +98,28 @@ exports.createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(defaultPassword, 10);
 
     try {
-        const [result] = await pool.execute(
-            'INSERT INTO User (id_user, username, password, role) VALUES (?, ?, ?, ?)',
-            [id_user, username, hashedPassword, role]
+        // Cek apakah NISN sudah ada
+        const [existing] = await pool.execute(
+            "SELECT * FROM User WHERE username = ?",
+            [username]
         );
-
-        res.status(201).json({
-            message: 'User berhasil ditambahkan',
-            id_user,
-            password_default: defaultPassword
-        });
+        
+        if (existing.length > 0) {
+            return res.status(409).json({
+                message: 'User dengan username tersebut sudah ada.'
+            });
+        } else {
+            const [result] = await pool.execute(
+                'INSERT INTO User (id_user, username, password, role) VALUES (?, ?, ?, ?)',
+                [id_user, username, hashedPassword, role]
+            );
+    
+            res.status(201).json({
+                message: 'User berhasil ditambahkan',
+                id_user,
+                password_default: defaultPassword
+            });
+        }
     } catch (error) {
         console.error('Gagal menambahkan user:', error);
         if (error.code === 'ER_DUP_ENTRY') {
