@@ -147,6 +147,27 @@ exports.updateUser = async (req, res) => {
     }
 
     try {
+        // Ambil data user lama
+        const [rows] = await pool.execute("SELECT * FROM User WHERE id_user = ?", [id_user]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'User dengan ID tersebut tidak ditemukan.' });
+        }
+        const userLama = rows[0];
+        
+        // Jika NISN berubah, cek keunikan NISN
+        if (username && username !== userLama.username) {
+            const [existing] = await pool.execute(
+                "SELECT * FROM User WHERE username = ?",
+                [username]
+            );
+            if (existing.length > 0) {
+                return res.status(409).json({
+                    message: 'User dengan ID tersebut sudah ada.'
+                });
+            }
+        }
+        
+        // Lakukan update
         const [result] = await pool.execute(
             'UPDATE User SET username = ?, role = ? WHERE id_user = ?',
             [username, role, id_user]
