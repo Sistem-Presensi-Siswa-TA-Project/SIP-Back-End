@@ -61,6 +61,39 @@ exports.getJadwalById = async (req, res) => {
   }
 };
 
+// GET jadwal by hari
+exports.getJadwalByHari = async (req, res) => {
+  const { hari } = req.params;
+
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE hari = ?', [hari]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
+    }
+
+    res.json({ message: 'Jadwal ditemukan', data: rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
+  }
+};
+
+// GET jadwal by guru
+exports.getJadwalByGuru = async (req, res) => {
+  const { nomor_induk_guru } = req.params;
+
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE nomor_induk_guru = ?', [nomor_induk_guru]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
+    }
+
+    res.json({ message: 'Jadwal ditemukan', data: rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
+  }
+};
 
 // PUT update jadwal
 exports.updateJadwal = async (req, res) => {
