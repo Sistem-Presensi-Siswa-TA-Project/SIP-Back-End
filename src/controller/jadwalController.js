@@ -84,16 +84,20 @@ exports.getJadwalByHaridanGuru = async (req, res) => {
 
 // GET jadwal by guru
 exports.getJadwalByGuru = async (req, res) => {
-  const { nomor_induk_guru } = req.params;
+  const { nomorIndukGuru } = req.params;
 
   try {
-    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE nomor_induk_guru = ?', [nomor_induk_guru]);
+    const [rows] = await pool.execute(
+      'SELECT * FROM Jadwal WHERE nomor_induk_guru = ?', 
+      [nomorIndukGuru]
+    );
 
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
     }
 
-    res.json({ message: 'Jadwal ditemukan', data: rows[0] });
+    // Kirim seluruh array rows, bukan rows[0]
+    res.json({ message: 'Jadwal ditemukan', data: rows });
   } catch (err) {
     res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
   }
