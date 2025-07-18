@@ -17,11 +17,11 @@ exports.createJadwal = async (req, res) => {
   try {
     // Cek apakah id_mapel ada
     const [cekMapel] = await pool.execute('SELECT * FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
-    if (cekMapel.length === 0) return res.status(404).json({ message: 'ID Mapel tidak ditemukan' });
+    if (cekMapel.length === 0) return res.status(404).json({ message: 'Kode mata pelajaran belum terdaftar!' });
 
     // Cek apakah guru ada
     const [cekGuru] = await pool.execute('SELECT * FROM Guru WHERE nomor_induk = ?', [nomor_induk_guru]);
-    if (cekGuru.length === 0) return res.status(404).json({ message: 'Guru tidak ditemukan' });
+    if (cekGuru.length === 0) return res.status(404).json({ message: 'Nomor induk guru belum terdaftar!' });
 
     await pool.execute(
       'INSERT INTO Jadwal (id_jadwal, id_mapel, nomor_induk_guru, hari, waktu, kelas, tahun_ajaran, semester) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
