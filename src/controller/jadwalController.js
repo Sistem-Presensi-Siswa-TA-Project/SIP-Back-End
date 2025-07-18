@@ -84,12 +84,12 @@ exports.getJadwalByHaridanGuru = async (req, res) => {
 
 // GET jadwal by guru
 exports.getJadwalByGuru = async (req, res) => {
-  const { nomorIndukGuru } = req.params;
+  const { guru } = req.params;
 
   try {
     const [rows] = await pool.execute(
       'SELECT * FROM Jadwal WHERE nomor_induk_guru = ?', 
-      [nomorIndukGuru]
+      [guru]
     );
 
     if (rows.length === 0) {
