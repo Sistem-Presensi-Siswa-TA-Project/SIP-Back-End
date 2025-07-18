@@ -62,11 +62,11 @@ exports.getJadwalById = async (req, res) => {
 };
 
 // GET jadwal by hari
-exports.getJadwalByHari = async (req, res) => {
-  const { hari } = req.params;
+exports.getJadwalByHaridanGuru = async (req, res) => {
+  const { hari, nomor_induk_guru } = req.params;
 
   try {
-    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE hari = ?', [hari]);
+    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE hari = ? AND nomor_induk_guru', [hari, nomor_induk_guru]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
