@@ -61,18 +61,22 @@ exports.getJadwalById = async (req, res) => {
   }
 };
 
-// GET jadwal by hari
+// GET jadwal by hari & guru
 exports.getJadwalByHaridanGuru = async (req, res) => {
-  const { hari, nomorIndukGuru } = req.params;
+  const { hari, guru } = req.params;
 
   try {
-    const [rows] = await pool.execute('SELECT * FROM Jadwal WHERE hari = ? AND nomor_induk_guru = ?', [hari, nomorIndukGuru]);
+    const [rows] = await pool.execute(
+      'SELECT * FROM Jadwal WHERE hari = ? AND nomor_induk_guru = ?', 
+      [hari, guru]
+    );
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: 'Jadwal tidak ditemukan' });
+      return res.status(404).json({ message: 'Jadwal tidak ditemukan', data: [] });
     }
 
-    res.json({ message: 'Jadwal ditemukan', data: rows[0] });
+    // Kembalikan semua rows (bukan rows[0])
+    res.json({ message: 'Jadwal ditemukan', data: rows });
   } catch (err) {
     res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
   }
