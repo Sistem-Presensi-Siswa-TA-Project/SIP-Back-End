@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const piketController = require('../controller/piketController');
-const formParser = require('../middleware/formParser'); // jika pakai form-data
+const formParser = require('../middleware/formParser');
 
 router.get('/', piketController.getAllPiket);
 router.get('/:id_piket', piketController.getPiketById);
+router.get('/piket/:kodePiket', piketController.getPiketByKodePiket);
 router.post('/', formParser, piketController.createPiket);
 router.put('/:id_piket', formParser, piketController.updatePiket);
 router.delete('/:id_piket', piketController.deletePiket);
