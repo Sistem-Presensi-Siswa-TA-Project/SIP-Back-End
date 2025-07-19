@@ -7,7 +7,7 @@ exports.getAllPiket = async (req, res) => {
     const [rows] = await pool.execute(`
       SELECT * FROM Piket
       ORDER BY
-        FIELD(status, 'Guru', 'OSIS'),
+        FIELD(status, 'Guru', 'OSIS')
     `);
     
     res.status(200).json({
