@@ -224,6 +224,53 @@ exports.updateUser = async (req, res) => {
     }
 };
 
+// PUT: Mengupdate password user
+exports.updatePassword = async (req, res) => {
+    const { id_user } = req.params;
+    const { password } = req.body;
+
+    // Validasi password
+    if (!password || password.trim() === "") {
+        return res.status(400).json({
+            message: 'Password wajib diisi.'
+        });
+    }
+
+    try {
+        // Cari user lama
+        const [rows] = await pool.execute("SELECT * FROM User WHERE id_user = ?", [id_user]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'User dengan ID tersebut tidak ditemukan.' });
+        }
+
+        // Hash password baru
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update password
+        const [result] = await pool.execute(
+            'UPDATE User SET password = ? WHERE id_user = ?',
+            [hashedPassword, id_user]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'User tidak ditemukan.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Password user berhasil diperbarui.',
+            id_user
+        });
+    } catch (error) {
+        console.error('Gagal memperbarui password user:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat memperbarui password user.',
+            error: error.message
+        });
+    }
+};
+
 // PUT: Reset Password
 exports.resetPassword = async (req, res) => {
     const { id_user } = req.params;
