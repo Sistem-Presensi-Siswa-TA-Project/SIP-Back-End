@@ -41,7 +41,8 @@ exports.getAllJadwal = async (req, res) => {
       SELECT * FROM Jadwal
       ORDER BY
         CAST(SUBSTRING(kelas, 1, LENGTH(kelas)-1) AS UNSIGNED),
-        SUBSTRING(kelas, -1)
+        SUBSTRING(kelas, -1),
+        FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')
     `);
     
     res.json({ message: 'Data jadwal berhasil diambil', data: rows });
