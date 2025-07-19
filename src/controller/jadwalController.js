@@ -111,10 +111,10 @@ exports.updateJadwal = async (req, res) => {
   try {
     // Cek mapel dan guru
     const [cekMapel] = await pool.execute('SELECT id_mapel FROM Mata_Pelajaran WHERE id_mapel = ?', [id_mapel]);
-    if (cekMapel.length === 0) return res.status(404).json({ message: 'ID Mapel tidak ditemukan' });
+    if (cekMapel.length === 0) return res.status(404).json({ message: 'Kode mata pelajaran belum terdaftar' });
 
     const [cekGuru] = await pool.execute('SELECT nomor_induk FROM Guru WHERE nomor_induk = ?', [nomor_induk_guru]);
-    if (cekGuru.length === 0) return res.status(404).json({ message: 'Guru tidak ditemukan' });
+    if (cekGuru.length === 0) return res.status(404).json({ message: 'Nomor induk guru belum terdaftar!' });
 
     const [result] = await pool.execute(
       'UPDATE Jadwal SET id_mapel = ?, nomor_induk_guru = ?, hari = ?, waktu = ?, kelas = ?, tahun_ajaran = ?, semester = ? WHERE id_jadwal = ?',
