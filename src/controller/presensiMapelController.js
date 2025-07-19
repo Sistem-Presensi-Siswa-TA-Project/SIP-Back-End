@@ -3,7 +3,6 @@ const { nanoid } = require('nanoid');
 
 // CREATE
 exports.createPresensiMapel = async (req, res) => {
-  console.log('🔥 req.body:', req.body);
   const {
     id_jadwal, nisn, tanggal_presensi, waktu_presensi,
     keterangan, nama_siswa, kelas, nomor_induk_guru
@@ -75,6 +74,52 @@ exports.getPresensiMapelByKelas = async (req, res) => {
     res.status(500).json({ message: 'Gagal ambil data berdasarkan kelas', error: err.message });
   }
 };
+
+//Cari presensi 
+exports.searchPresensiMapelByForm = async (req, res) => {
+  const { tanggal, nama, mapel, kelas } = req.body;
+
+  if (!tanggal) {
+    return res.status(400).json({ message: 'Tanggal presensi wajib diisi' });
+  }
+
+  try {
+    let query = `
+      SELECT pm.*, mp.nama AS nama_mapel
+      FROM Presensi_Mapel pm
+      JOIN Jadwal j ON pm.id_jadwal = j.id_jadwal
+      JOIN Mata_Pelajaran mp ON j.id_mapel = mp.id_mapel
+      WHERE pm.tanggal_presensi = ?
+    `;
+    const values = [tanggal];
+
+    if (nama) {
+      query += ' AND pm.nama_siswa LIKE ?';
+      values.push(`%${nama}%`);
+    }
+
+    if (mapel) {
+      query += ' AND mp.nama LIKE ?';
+      values.push(`%${mapel}%`);
+    }
+
+    if (kelas) {
+      query += ' AND pm.kelas = ?';
+      values.push(kelas);
+    }
+
+    const [rows] = await pool.execute(query, values);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Data tidak ditemukan' });
+    }
+
+    res.json({ message: 'Data ditemukan', data: rows });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal cari data', error: err.message });
+  }
+};
+
 
 // UPDATE
 exports.updatePresensiMapel = async (req, res) => {
