@@ -7,7 +7,7 @@ const formParser = require('../middleware/formParser');
 router.get('/', presensiPiketController.getAllPresensiPiket);
 router.get('/:id', presensiPiketController.getPresensiPiketById);
 router.get('/kelas/:kelas', presensiPiketController.getPresensiPiketByKelas);
-router.post('/search-form', presensiPiketController.searchPresensiPiketByForm);
+router.post('/search', presensiPiketController.searchPresensiPiketByForm);
 router.post('/', formParser, presensiPiketController.createPresensiPiket);
 router.put('/:id', formParser, presensiPiketController.updatePresensiPiket);
 router.delete('/:id', presensiPiketController.deletePresensiPiket);
