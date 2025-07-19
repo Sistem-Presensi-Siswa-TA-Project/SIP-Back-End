@@ -143,7 +143,7 @@ exports.createUser = async (req, res) => {
         } else {
             const [result] = await pool.execute(
                 'INSERT INTO User (id_user, username, password, role) VALUES (?, ?, ?, ?)',
-                [id_user, username, hashedPassword, role]
+                [id_user, username, hashedPassword, role.toLowerCase()]
             );
     
             res.status(201).json({
