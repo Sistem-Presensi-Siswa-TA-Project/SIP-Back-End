@@ -4,7 +4,13 @@ const { nanoid } = require('nanoid');
 // GET semua piket
 exports.getAllPiket = async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT * FROM Piket');
+    const [rows] = await pool.execute(`
+      SELECT * FROM Piket
+      ORDER BY
+        FIELD(status, 'Guru', 'OSIS'),
+        nama
+    `);
+    
     res.status(200).json({
       message: 'Berhasil mengambil semua data piket',
       data: rows
