@@ -4,7 +4,13 @@ const { nanoid } = require('nanoid');
 // GET semua siswa
 exports.getAllSiswa = async (req, res) => {
     try {
-        const [rows] = await pool.execute('SELECT * FROM Siswa');
+        const [rows] = await pool.execute(`
+            SELECT * FROM Siswa
+            ORDER BY 
+                CAST(SUBSTRING(kelas, 1, LENGTH(kelas)-1) AS UNSIGNED),
+                SUBSTRING(kelas, -1),
+                nisn
+        `);
         res.status(200).json({
             message: 'Berhasil mengambil semua data siswa',
             data: rows
