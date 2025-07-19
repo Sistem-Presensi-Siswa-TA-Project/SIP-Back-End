@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const siswaController = require('../controller/siswaController');
-const formParser = require('../middleware/formParser'); // <== baru
-
+const formParser = require('../middleware/formParser');
 
 // GET semua siswa
 router.get('/', siswaController.getAllSiswa);
@@ -13,7 +12,7 @@ router.get('/kelas/:kelas', siswaController.getSiswaByKelas);
 // GET siswa berdasarkan NISN
 router.get('/nisn/:nisn', siswaController.getSiswaByNisn);
 
-// GET siswa berdasarkan NISN
+// GET siswa berdasarkan id
 router.get('/:id_siswa', siswaController.getSiswaById);
 
 // POST tambah siswa
