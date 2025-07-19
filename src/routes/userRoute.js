@@ -15,6 +15,8 @@ router.get('/username/:username', userController.getUserByUsername);
 router.post('/', formParser, userController.createUser);
 // PUT update user by id_user
 router.put('/:id_user', userController.updateUser);
+// PUT ubah password by id_user
+router.put('/password/:id_user', userController.updatePassword);
 // PUT reset password by id_user
 router.put('/reset-password/:id_user', userController.resetPassword);
 // DELETE user by id_user
