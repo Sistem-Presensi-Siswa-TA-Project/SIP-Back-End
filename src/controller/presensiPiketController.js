@@ -3,7 +3,6 @@ const { nanoid } = require('nanoid');
 
 // CREATE
 exports.createPresensiPiket = async (req, res) => {
-  console.log('🔥 req.body:', req.body);
   const {
     nisn,
     tanggal_presensi,
@@ -74,6 +73,42 @@ exports.getPresensiPiketByKelas = async (req, res) => {
     res.status(500).json({ message: 'Gagal ambil data berdasarkan kelas', error: err.message });
   }
 };
+
+//Search presensi piket
+exports.searchPresensiPiketByForm = async (req, res) => {
+  const { tanggal_presensi, nama_siswa, kelas } = req.body;
+
+  if (!tanggal_presensi) {
+    return res.status(400).json({ message: 'Tanggal presensi wajib diisi' });
+  }
+
+  try {
+    let query = `SELECT * FROM Presensi_Piket WHERE tanggal_presensi = ?`;
+    const values = [tanggal_presensi];
+
+    if (nama_siswa && nama_siswa.trim() !== '') {
+      query += ' AND nama_siswa LIKE ?';
+      values.push(`%${nama_siswa}%`);
+    }
+
+    if (kelas && kelas.trim() !== '') {
+      query += ' AND kelas = ?';
+      values.push(kelas);
+    }
+
+    const [rows] = await pool.execute(query, values);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Data tidak ditemukan' });
+    }
+
+    res.json({ message: 'Data ditemukan', data: rows });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal cari data', error: err.message });
+  }
+};
+
+
 
 // UPDATE
 exports.updatePresensiPiket = async (req, res) => {
