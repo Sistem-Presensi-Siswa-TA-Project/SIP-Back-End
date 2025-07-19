@@ -38,8 +38,8 @@ exports.getPiketById = async (req, res) => {
   }
 };
 
-// GET piket by ID
-exports.getPiketById = async (req, res) => {
+// GET piket by kode piket
+exports.getPiketByKodePiket = async (req, res) => {
   const { kodePiket } = req.params;
   try {
     const [rows] = await pool.execute('SELECT * FROM Piket WHERE kode_piket = ?', [kodePiket]);
