@@ -8,7 +8,6 @@ exports.getAllPiket = async (req, res) => {
       SELECT * FROM Piket
       ORDER BY
         FIELD(status, 'Guru', 'OSIS'),
-        nama
     `);
     
     res.status(200).json({
