@@ -151,7 +151,7 @@ exports.createSiswa = async (req, res) => {
         
         if (existing.length > 0) {
             return res.status(409).json({
-                message: 'Siswa dengan NISN tersebut sudah ada.'
+                message: 'Siswa dengan NISN tersebut telah terdaftar!'
             });
         } else {
             // Jika belum ada, lakukan insert
