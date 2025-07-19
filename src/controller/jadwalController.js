@@ -37,7 +37,13 @@ exports.createJadwal = async (req, res) => {
 // GET semua jadwal
 exports.getAllJadwal = async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT * FROM Jadwal');
+    const [rows] = await pool.execute(`
+      SELECT * FROM Jadwal
+      ORDER BY
+        CAST(SUBSTRING(kelas, 1, LENGTH(kelas)-1) AS UNSIGNED),
+        SUBSTRING(kelas, -1)
+    `);
+    
     res.json({ message: 'Data jadwal berhasil diambil', data: rows });
   } catch (err) {
     res.status(500).json({ message: 'Gagal ambil jadwal', error: err.message });
