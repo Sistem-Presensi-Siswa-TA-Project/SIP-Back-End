@@ -4,7 +4,7 @@ const { nanoid } = require('nanoid');
 // GET semua guru
 exports.getAllGuru = async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT * FROM Guru');
+    const [rows] = await pool.execute('SELECT * FROM Guru ORDER BY nama ASC');
     res.status(200).json({
       message: 'Berhasil mengambil semua data guru',
       data: rows
