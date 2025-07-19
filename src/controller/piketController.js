@@ -38,6 +38,21 @@ exports.getPiketById = async (req, res) => {
   }
 };
 
+// GET piket by ID
+exports.getPiketById = async (req, res) => {
+  const { kodePiket } = req.params;
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Piket WHERE kode_piket = ?', [kodePiket]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Piket tidak ditemukan' });
+    }
+    res.status(200).json({ message: 'Berhasil mengambil data piket', data: rows[0] });
+  } catch (error) {
+    console.error('Error get piket by id:', error);
+    res.status(500).json({ message: 'Gagal mengambil data piket', error: error.message });
+  }
+};
+
 // POST: tambah piket
 exports.createPiket = async (req, res) => {
   const { nomor_induk, kode_piket, status } = req.body;
