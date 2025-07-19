@@ -73,7 +73,11 @@ exports.getJadwalByHaridanGuru = async (req, res) => {
 
   try {
     const [rows] = await pool.execute(
-      'SELECT * FROM Jadwal WHERE hari = ? AND nomor_induk_guru = ?', 
+      `SELECT * FROM Jadwal 
+        WHERE hari = ? AND nomor_induk_guru = ? 
+        ORDER BY
+          CAST(SUBSTRING(kelas, 1, LENGTH(kelas)-1) AS UNSIGNED),
+          SUBSTRING(kelas, -1)`, 
       [hari, guru]
     );
 
@@ -94,7 +98,11 @@ exports.getJadwalByGuru = async (req, res) => {
 
   try {
     const [rows] = await pool.execute(
-      'SELECT * FROM Jadwal WHERE nomor_induk_guru = ?', 
+      `SELECT * FROM Jadwal 
+        WHERE nomor_induk_guru = ?
+        ORDER BY
+          CAST(SUBSTRING(kelas, 1, LENGTH(kelas)-1) AS UNSIGNED),
+          SUBSTRING(kelas, -1)`, 
       [guru]
     );
 
