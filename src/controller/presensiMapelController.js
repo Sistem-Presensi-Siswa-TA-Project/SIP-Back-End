@@ -65,7 +65,7 @@ exports.getPresensiMapelByIdJadwal = async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM Presensi_Mapel WHERE id_jadwal = ?', [idJadwal]);
     if (rows.length === 0) return res.status(404).json({ message: 'Data tidak ditemukan' });
-    res.json({ message: 'Data ditemukan', data: rows[0] });
+    res.json({ message: 'Data ditemukan', data: rows });
   } catch (err) {
     res.status(500).json({ message: 'Gagal ambil data', error: err.message });
   }
