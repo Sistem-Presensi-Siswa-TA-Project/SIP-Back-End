@@ -60,7 +60,7 @@ exports.getPresensiMapelById = async (req, res) => {
 };
 
 // READ BY ID JADWAL
-exports.getPresensiMapelById = async (req, res) => {
+exports.getPresensiMapelByIdJadwal = async (req, res) => {
   const { idJadwal } = req.params;
   try {
     const [rows] = await pool.execute('SELECT * FROM Presensi_Mapel WHERE id_jadwal = ?', [idJadwal]);
