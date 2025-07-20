@@ -148,13 +148,18 @@ exports.searchPresensiMapelByForm = async (req, res) => {
 // UPDATE PRESENSI MAPEL
 exports.updatePresensiMapelBatch = async (req, res) => {
   let dataArray = req.body;
-
-  // Jika bukan array, jadikan array
   if (!Array.isArray(dataArray)) dataArray = [dataArray];
 
   try {
     for (const data of dataArray) {
-      // VALIDASI! Semua field harus ada
+      // Debug log
+      console.log({
+        id_jadwal: data.id_jadwal,
+        tanggal_presensi: data.tanggal_presensi,
+        nisn: data.nisn,
+        keterangan: data.keterangan
+      });
+
       if (!data.id_jadwal || !data.tanggal_presensi || !data.nisn || !data.keterangan) {
         return res.status(400).json({
           message: 'Bad Request: Missing field (id_jadwal, tanggal_presensi, nisn, keterangan) is required',
@@ -162,7 +167,6 @@ exports.updatePresensiMapelBatch = async (req, res) => {
         });
       }
 
-      // Null-safe, default ke null jika tidak ada
       const [result] = await pool.execute(
         `UPDATE Presensi_Mapel 
          SET keterangan = ? 
@@ -174,9 +178,6 @@ exports.updatePresensiMapelBatch = async (req, res) => {
           data.nisn ?? null
         ]
       );
-
-      // Optional: cek jika data tidak ditemukan
-      // if (result.affectedRows === 0) ... (bisa diakumulasi)
     }
 
     res.json({ message: 'Presensi mapel berhasil diperbarui' });
