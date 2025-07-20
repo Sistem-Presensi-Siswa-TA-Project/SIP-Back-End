@@ -146,7 +146,7 @@ exports.searchPresensiMapelByForm = async (req, res) => {
 };
 
 // UPDATE PRESENSI MAPEL
-exports.updatePresensiMapelBatch = async (req, res) => {
+exports.updatePresensiMapel= async (req, res) => {
   const presensiArray = req.body;
   if (!Array.isArray(presensiArray))
     return res.status(400).json({ message: 'Data harus berupa array.' });
