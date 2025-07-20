@@ -145,21 +145,23 @@ exports.searchPresensiMapelByForm = async (req, res) => {
   }
 };
 
-
-// UPDATE
+// UPDATE PRESENSI MAPEL
 exports.updatePresensiMapel = async (req, res) => {
-  const { id } = req.params;
   const {
-    id_jadwal, nisn, tanggal_presensi, waktu_presensi,
-    keterangan, nama_siswa, kelas, nomor_induk_guru
+    id_jadwal, tanggal_presensi, nama_siswa, keterangan
   } = req.body;
 
   try {
     const [result] = await pool.execute(
-      'UPDATE Presensi_Mapel SET id_jadwal = ?, nisn = ?, tanggal_presensi = ?, waktu_presensi = ?, keterangan = ?, nama_siswa = ?, kelas = ?, nomor_induk_guru = ? WHERE id_presensi = ?',
-      [id_jadwal, nisn, tanggal_presensi, waktu_presensi, keterangan, nama_siswa, kelas, nomor_induk_guru, id]
+      `UPDATE Presensi_Mapel 
+       SET keterangan = ? 
+       WHERE id_jadwal = ? AND tanggal_presensi = ? AND nama_siswa = ?`,
+      [keterangan, id_jadwal, tanggal_presensi, nama_siswa]
     );
-    if (result.affectedRows === 0) return res.status(404).json({ message: 'Data tidak ditemukan' });
+
+    if (result.affectedRows === 0)
+      return res.status(404).json({ message: 'Data tidak ditemukan' });
+
     res.json({ message: 'Presensi mapel berhasil diperbarui' });
   } catch (err) {
     res.status(500).json({ message: 'Gagal update data', error: err.message });
