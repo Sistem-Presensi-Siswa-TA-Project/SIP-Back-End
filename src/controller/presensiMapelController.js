@@ -157,7 +157,7 @@ exports.updatePresensiMapelBatch = async (req, res) => {
       // VALIDASI! Semua field harus ada
       if (!data.id_jadwal || !data.tanggal_presensi || !data.nisn || !data.keterangan) {
         return res.status(400).json({
-          message: 'Bad Request: Missing field (id_jadwal, tanggal_presensi, nama_siswa, keterangan) is required',
+          message: 'Bad Request: Missing field (id_jadwal, tanggal_presensi, nisn, keterangan) is required',
           data
         });
       }
@@ -171,7 +171,7 @@ exports.updatePresensiMapelBatch = async (req, res) => {
           data.keterangan ?? null,
           data.id_jadwal ?? null,
           data.tanggal_presensi ?? null,
-          data.niSN ?? null
+          data.nisn ?? null
         ]
       );
 
