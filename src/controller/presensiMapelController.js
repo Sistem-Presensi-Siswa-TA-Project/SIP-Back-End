@@ -146,25 +146,34 @@ exports.searchPresensiMapelByForm = async (req, res) => {
 };
 
 // UPDATE PRESENSI MAPEL
-exports.updatePresensiMapel = async (req, res) => {
-  const {
-    id_jadwal, tanggal_presensi, nama_siswa, keterangan
-  } = req.body;
+exports.updatePresensiMapelBatch = async (req, res) => {
+  const presensiArray = req.body;
+  if (!Array.isArray(presensiArray))
+    return res.status(400).json({ message: 'Data harus berupa array.' });
 
   try {
-    const [result] = await pool.execute(
-      `UPDATE Presensi_Mapel 
-       SET keterangan = ? 
-       WHERE id_jadwal = ? AND tanggal_presensi = ? AND nama_siswa = ?`,
-      [keterangan, id_jadwal, tanggal_presensi, nama_siswa]
-    );
+    const results = await Promise.all(presensiArray.map(async (item) => {
+      const { id_jadwal, nisn, tanggal_presensi, keterangan, nama_siswa } = item;
+      if (!id_jadwal || !nisn || !tanggal_presensi || !keterangan || !nama_siswa) {
+        return { success: false, nisn, message: 'Data tidak lengkap.' };
+      }
 
-    if (result.affectedRows === 0)
-      return res.status(404).json({ message: 'Data tidak ditemukan' });
+      // Update untuk masing-masing siswa
+      const [result] = await pool.execute(
+        `UPDATE Presensi_Mapel 
+         SET keterangan = ? 
+         WHERE id_jadwal = ? AND tanggal_presensi = ? AND nama_siswa = ? AND nisn = ?`,
+        [keterangan, id_jadwal, tanggal_presensi, nama_siswa, nisn]
+      );
+      if (result.affectedRows === 0) {
+        return { success: false, nisn, message: 'Data tidak ditemukan.' };
+      }
+      return { success: true, nisn };
+    }));
 
-    res.json({ message: 'Presensi mapel berhasil diperbarui' });
+    res.json({ message: 'Batch update selesai', results });
   } catch (err) {
-    res.status(500).json({ message: 'Gagal update data', error: err.message });
+    res.status(500).json({ message: 'Gagal batch update', error: err.message });
   }
 };
 
