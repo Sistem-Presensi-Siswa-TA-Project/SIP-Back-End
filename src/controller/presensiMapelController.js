@@ -59,6 +59,19 @@ exports.getPresensiMapelById = async (req, res) => {
   }
 };
 
+// READ BY ID JADWAL
+exports.getPresensiMapelById = async (req, res) => {
+  const { idJadwal } = req.params;
+  try {
+    const [rows] = await pool.execute('SELECT * FROM Presensi_Mapel WHERE id_jadwal = ?', [idJadwal]);
+    if (rows.length === 0) return res.status(404).json({ message: 'Data tidak ditemukan' });
+    res.json({ message: 'Data ditemukan', data: rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal ambil data', error: err.message });
+  }
+};
+
+// READ BY KELAS
 exports.getPresensiMapelByKelas = async (req, res) => {
   const { kelas } = req.params;
 
