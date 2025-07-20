@@ -7,6 +7,7 @@ const formParser = require('../middleware/formParser');
 router.get('/', presensiMapelController.getAllPresensiMapel);
 router.get('/:id', presensiMapelController.getPresensiMapelById);
 router.get('/jadwal/:idJadwal', presensiMapelController.getPresensiMapelByIdJadwal);
+router.get('/jadwal/:idJadwal/tanggal/:tanggal', presensiMapelController.getPresensiMapelByJadwalTanggal);
 router.get('/kelas/:kelas', presensiMapelController.getPresensiMapelByKelas);
 router.post('/search', presensiMapelController.searchPresensiMapelByForm);
 router.post('/', formParser, presensiMapelController.createPresensiMapel);
