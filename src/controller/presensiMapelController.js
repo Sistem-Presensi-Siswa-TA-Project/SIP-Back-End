@@ -146,34 +146,42 @@ exports.searchPresensiMapelByForm = async (req, res) => {
 };
 
 // UPDATE PRESENSI MAPEL
-exports.updatePresensiMapel= async (req, res) => {
-  const presensiArray = req.body;
-  if (!Array.isArray(presensiArray))
-    return res.status(400).json({ message: 'Data harus berupa array.' });
+exports.updatePresensiMapelBatch = async (req, res) => {
+  let dataArray = req.body;
+
+  // Jika bukan array, jadikan array
+  if (!Array.isArray(dataArray)) dataArray = [dataArray];
 
   try {
-    const results = await Promise.all(presensiArray.map(async (item) => {
-      const { id_jadwal, nisn, tanggal_presensi, keterangan, nama_siswa } = item;
-      if (!id_jadwal || !nisn || !tanggal_presensi || !keterangan || !nama_siswa) {
-        return { success: false, nisn, message: 'Data tidak lengkap.' };
+    for (const data of dataArray) {
+      // VALIDASI! Semua field harus ada
+      if (!data.id_jadwal || !data.tanggal_presensi || !data.nisn || !data.keterangan) {
+        return res.status(400).json({
+          message: 'Bad Request: Missing field (id_jadwal, tanggal_presensi, nama_siswa, keterangan) is required',
+          data
+        });
       }
 
-      // Update untuk masing-masing siswa
+      // Null-safe, default ke null jika tidak ada
       const [result] = await pool.execute(
         `UPDATE Presensi_Mapel 
          SET keterangan = ? 
-         WHERE id_jadwal = ? AND tanggal_presensi = ? AND nama_siswa = ? AND nisn = ?`,
-        [keterangan, id_jadwal, tanggal_presensi, nama_siswa, nisn]
+         WHERE id_jadwal = ? AND tanggal_presensi = ? AND nisn = ?`,
+        [
+          data.keterangan ?? null,
+          data.id_jadwal ?? null,
+          data.tanggal_presensi ?? null,
+          data.niSN ?? null
+        ]
       );
-      if (result.affectedRows === 0) {
-        return { success: false, nisn, message: 'Data tidak ditemukan.' };
-      }
-      return { success: true, nisn };
-    }));
 
-    res.json({ message: 'Batch update selesai', results });
+      // Optional: cek jika data tidak ditemukan
+      // if (result.affectedRows === 0) ... (bisa diakumulasi)
+    }
+
+    res.json({ message: 'Presensi mapel berhasil diperbarui' });
   } catch (err) {
-    res.status(500).json({ message: 'Gagal batch update', error: err.message });
+    res.status(500).json({ message: 'Gagal update data', error: err.message });
   }
 };
 
