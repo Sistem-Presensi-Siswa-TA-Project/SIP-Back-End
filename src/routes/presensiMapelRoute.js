@@ -11,7 +11,7 @@ router.get('/jadwal/:idJadwal/tanggal/:tanggal', presensiMapelController.getPres
 router.get('/kelas/:kelas', presensiMapelController.getPresensiMapelByKelas);
 router.post('/search', presensiMapelController.searchPresensiMapelByForm);
 router.post('/', formParser, presensiMapelController.createPresensiMapel);
-router.put('/', formParser, presensiMapelController.updatePresensiMapel);
+router.put('/update', formParser, presensiMapelController.updatePresensiMapel);
 router.delete('/:id', presensiMapelController.deletePresensiMapel);
 
 module.exports = router;
