@@ -8,12 +8,13 @@ const userRoute = require('./routes/userRoute.js');
 const siswaRoute = require('./routes/siswaRoute.js');
 const authRoute = require('./routes/authRoute.js');
 const middlewareLogRequest = require('./middleware/logs.js');
-const guruRoute = require('./routes/guruRoute');
-const piketRoute = require('./routes/piketRoute');
-const mapelRoute = require('./routes/mapelRoute');
-const jadwalRoute = require('./routes/jadwalRoute');
+const guruRoute = require('./routes/guruRoute.js');
+const piketRoute = require('./routes/piketRoute.js');
+const mapelRoute = require('./routes/mapelRoute.js');
+const jadwalRoute = require('./routes/jadwalRoute.js');
 const presensiMapelRoute = require('./routes/presensiMapelRoute.js');
 const presensiPiketRoute = require('./routes/presensiPiketRoute.js');
+const saranRoute = require('./routes/saranRoute.js');
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use('/api/mapel', mapelRoute);
 app.use('/api/jadwal', jadwalRoute);
 app.use('/api/presensi-mapel', presensiMapelRoute);
 app.use('/api/presensi-piket', presensiPiketRoute);
+app.use('/api/saran', saranRoute);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Presensi API Backend!');
