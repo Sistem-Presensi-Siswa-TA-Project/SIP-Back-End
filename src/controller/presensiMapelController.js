@@ -9,7 +9,7 @@ exports.createPresensiMapel = async (req, res) => {
   try {
     for (const data of dataArray) {
       // Validasi field
-      if (!data.nisn || !data.tanggal_presensi || !data.waktu_presensi || !data.keterangan || !data.nama_siswa || !data.kelas || !data.nomor_induk_guru ) {
+      if (!data.id_jadwal || !data.nisn || !data.tanggal_presensi || !data.waktu_presensi || !data.keterangan || !data.nama_siswa || !data.kelas || !data.nomor_induk_guru ) {
         return res.status(400).json({ message: 'Field wajib tidak boleh kosong', data });
       }
       const id_presensi = `PM-${nanoid(12)}`;
