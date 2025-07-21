@@ -102,24 +102,26 @@ exports.searchPresensiMapelByForm = async (req, res) => {
       JOIN Jadwal j ON pm.id_jadwal = j.id_jadwal
       JOIN Mata_Pelajaran mp ON j.id_mapel = mp.id_mapel
       WHERE pm.tanggal_presensi = ?
-      ORDER BY pm.nisn ASC
     `;
+    
     const values = [tanggal];
-
+    
     if (nama) {
       query += ' AND pm.nama_siswa LIKE ?';
       values.push(`%${nama}%`);
     }
-
+    
     if (mapel) {
       query += ' AND mp.nama LIKE ?';
       values.push(`%${mapel}%`);
     }
-
+    
     if (kelas) {
       query += ' AND pm.kelas = ?';
       values.push(kelas);
     }
+    
+    query += ' ORDER BY pm.nisn ASC';
 
     const [rows] = await pool.execute(query, values);
 
