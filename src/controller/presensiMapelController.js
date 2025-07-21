@@ -15,10 +15,10 @@ exports.createPresensiMapel = async (req, res) => {
       const id_presensi = `PM-${nanoid(12)}`;
 
       await pool.execute(
-        'INSERT INTO Presensi_Mapel (id_presensi, id_jadwal, nisn, tanggal_presensi, waktu_presensi, keterangan, nama_siswa, kelas, nomor_induk_guru) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO Presensi_Mapel (id_presensi, id_jadwal, nisn, tanggal_presensi, waktu_presensi, keterangan, nama_siswa, kelas, nomor_induk_guru) VALUES (?, ?, ?, ?, CURRENT_TIME, ?, ?, ?, ?)',
         [
           id_presensi, data.id_jadwal, data.nisn, data.tanggal_presensi,
-          data.waktu_presensi, data.keterangan, data.nama_siswa, data.kelas, data.nomor_induk_guru
+          data.keterangan, data.nama_siswa, data.kelas, data.nomor_induk_guru
         ]
       );
     }
