@@ -108,8 +108,6 @@ exports.searchPresensiPiketByForm = async (req, res) => {
   }
 };
 
-
-
 // UPDATE
 exports.updatePresensiPiket = async (req, res) => {
   const { id } = req.params;
