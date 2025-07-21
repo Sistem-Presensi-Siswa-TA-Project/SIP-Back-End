@@ -133,7 +133,7 @@ exports.searchPresensiMapelByForm = async (req, res) => {
 };
 
 // UPDATE PRESENSI MAPEL
-exports.updatePresensiMapelBatch = async (req, res) => {
+exports.updatePresensiMapel = async (req, res) => {
   let dataArray = req.body;
   if (!Array.isArray(dataArray)) dataArray = [dataArray];
 
