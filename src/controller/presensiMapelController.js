@@ -3,35 +3,26 @@ const { nanoid } = require('nanoid');
 
 // CREATE
 exports.createPresensiMapel = async (req, res) => {
-  const {
-    id_jadwal, nisn, tanggal_presensi, waktu_presensi,
-    keterangan, nama_siswa, kelas, nomor_induk_guru
-  } = req.body;
-
-  const id_presensi = `PM-${nanoid(12)}`;
-
-  if (!id_jadwal || !nisn || !tanggal_presensi || !waktu_presensi || !keterangan || !nama_siswa || !kelas || !nomor_induk_guru ) {
-    return res.status(400).json({ message: 'Field wajib tidak boleh kosong' });
-  }
+  let dataArray = req.body;
+  if (!Array.isArray(dataArray)) dataArray = [dataArray];
 
   try {
-    // Cek apakah id_jadwal sudah ada atau belum
-    const [jadwalCheck] = await pool.execute('SELECT * FROM Jadwal WHERE id_jadwal = ?', [id_jadwal]);
-    if (jadwalCheck.length === 0) {
-      return res.status(404).json({ message: 'ID Jadwal tidak ditemukan di tabel Jadwal!' });
-    }
+    for (const data of dataArray) {
+      // Validasi field
+      if (!data.id_jadwal || !data.nisn || !data.tanggal_presensi || !data.waktu_presensi || !data.keterangan || !data.nama_siswa || !data.kelas || !data.nomor_induk_guru ) {
+        return res.status(400).json({ message: 'Field wajib tidak boleh kosong', data });
+      }
+      const id_presensi = `PM-${nanoid(12)}`;
 
-    // Cek apakah nisn valid
-    const [siswaCheck] = await pool.execute('SELECT * FROM Siswa WHERE nisn = ?', [nisn]);
-    if (siswaCheck.length === 0) {
-      return res.status(404).json({ message: 'Siswa dengan NISN ini tidak ditemukan' });
+      await pool.execute(
+        'INSERT INTO Presensi_Mapel (id_presensi, id_jadwal, nisn, tanggal_presensi, waktu_presensi, keterangan, nama_siswa, kelas, nomor_induk_guru) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+          id_presensi, data.id_jadwal, data.nisn, data.tanggal_presensi,
+          data.waktu_presensi, data.keterangan, data.nama_siswa, data.kelas, data.nomor_induk_guru
+        ]
+      );
     }
-
-    await pool.execute(
-      'INSERT INTO Presensi_Mapel (id_presensi, id_jadwal, nisn, tanggal_presensi, waktu_presensi, keterangan, nama_siswa, kelas, nomor_induk_guru) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [id_presensi, id_jadwal, nisn, tanggal_presensi, waktu_presensi, keterangan, nama_siswa, kelas, nomor_induk_guru]
-    );
-    res.status(201).json({ message: 'Presensi mapel berhasil ditambahkan', id_presensi });
+    res.status(201).json({ message: 'Presensi mapel berhasil ditambahkan' });
   } catch (err) {
     res.status(500).json({ message: 'Gagal tambah presensi mapel', error: err.message });
   }
