@@ -18,7 +18,7 @@ exports.createPresensiMapel = async (req, res) => {
     // Cek apakah id_jadwal sudah ada atau belum
     const [jadwalCheck] = await pool.execute('SELECT * FROM Jadwal WHERE id_jadwal = ?', [id_jadwal]);
     if (jadwalCheck.length === 0) {
-      return res.status(404).json({ message: 'ID Jadwal tidak ditemukan di tabel Jadwal' });
+      return res.status(404).json({ message: 'ID Jadwal tidak ditemukan di tabel Jadwal!' });
     }
 
     // Cek apakah nisn valid
