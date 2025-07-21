@@ -1,6 +1,23 @@
 const pool = require('../config/databaseConfig');
 const { nanoid } = require('nanoid');
 
+// GET semua saran
+exports.getAllSaran = async (req, res) => {
+    try {
+        const [rows] = await pool.execute(`SELECT * FROM Saran`);
+        res.status(200).json({
+            message: 'Berhasil mengambil semua data saran',
+            data: rows
+        });
+    } catch (error) {
+        console.error('Gagal mengambil data siswa:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan saat mengambil data saran',
+            error: error.message
+        });
+    }
+};
+
 // CREATE
 exports.createSaran = async (req, res) => {
   const { username, nama, email, subjek, pesan } = req.body;
