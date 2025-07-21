@@ -36,7 +36,7 @@ exports.getSiswaByKelas = async (req, res) => {
 
     try {
         const [rows] = await pool.execute(
-            'SELECT * FROM Siswa WHERE kelas = ?',
+            'SELECT * FROM Siswa WHERE kelas = ? ORDER BY nisn ASC',
             [kelas]
         );
 
