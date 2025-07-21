@@ -102,6 +102,7 @@ exports.searchPresensiMapelByForm = async (req, res) => {
       JOIN Jadwal j ON pm.id_jadwal = j.id_jadwal
       JOIN Mata_Pelajaran mp ON j.id_mapel = mp.id_mapel
       WHERE pm.tanggal_presensi = ?
+      ORDER BY pm.nisn ASC
     `;
     const values = [tanggal];
 
