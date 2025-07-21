@@ -14,6 +14,9 @@ router.get('/hari/:hari/guru/:guru', jadwalController.getJadwalByHaridanGuru);
 //GET jadwal berdasarkan guru
 router.get('/guru/:guru', jadwalController.getJadwalByGuru);
 
+//GET jadwal berdasarkan kelas
+router.get('/kelas/:kelas', jadwalController.getJadwalByKelas);
+
 // POST tambah jadwal (dengan pengecekan mapel dan guru)
 router.post('/', jadwalController.createJadwal);
 
