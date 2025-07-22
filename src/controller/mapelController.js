@@ -90,7 +90,7 @@ exports.updateMapel = async (req, res) => {
   }
 };
 
-// DELETE semua jadwal
+// DELETE semua mapel
 exports.deleteAllMapel = async (req, res) => {
   try {
     const [result] = await pool.execute('DELETE FROM Mata_Pelajaran');
