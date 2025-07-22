@@ -192,3 +192,19 @@ exports.deletePresensiMapel = async (req, res) => {
     res.status(500).json({ message: 'Gagal hapus data', error: err.message });
   }
 };
+
+// DELETE presensi by id_jadwal & tanggal_presensi
+exports.deletePresensiMapelByJadwalAndTanggal = async (req, res) => {
+  const { id_jadwal, tanggal_presensi } = req.params;
+  try {
+    const [result] = await pool.execute(
+      'DELETE FROM Presensi_Mapel WHERE id_jadwal = ? AND tanggal_presensi = ?',
+      [id_jadwal, tanggal_presensi]
+    );
+    if (result.affectedRows === 0)
+      return res.status(404).json({ message: 'Data tidak ditemukan' });
+    res.json({ message: 'Presensi mapel berhasil dihapus' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus data', error: err.message });
+  }
+};
