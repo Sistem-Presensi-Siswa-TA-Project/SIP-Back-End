@@ -14,6 +14,9 @@ router.post('/', mapelController.createMapel);
 // PUT update mapel
 router.put('/:id', mapelController.updateMapel);
 
+// DELETE all mapel
+router.delete('/', mapelController.deleteAllMapel);
+
 // DELETE mapel
 router.delete('/:id', mapelController.deleteMapel);
 
