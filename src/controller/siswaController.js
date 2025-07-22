@@ -259,6 +259,19 @@ exports.updateSiswa = async (req, res) => {
     }
 };
 
+// DELETE semua siswa
+exports.deleteAllSiswa = async (req, res) => {
+  try {
+    const [result] = await pool.execute('DELETE FROM Siswa');
+    res.json({
+      message: 'Semua data siswa berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua data siswa', error: err.message });
+  }
+};
+
 // DELETE siswa berdasarkan ID
 exports.deleteSiswa = async (req, res) => {
     const { id_siswa } = req.params;
