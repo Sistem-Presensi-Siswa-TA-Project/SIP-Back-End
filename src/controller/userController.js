@@ -30,7 +30,10 @@ exports.getUserByRole = async (req, res) => {
     }
 
     try {
-        const [rows] = await pool.execute('SELECT id_user, username, role FROM User WHERE role = ?', [role]);
+        const [rows] = await pool.execute(
+            'SELECT id_user, username, role FROM User WHERE role = ? ORDER BY username ASC', 
+            [role]
+        );
 
         if (rows.length === 0) {
             return res.status(404).json({
