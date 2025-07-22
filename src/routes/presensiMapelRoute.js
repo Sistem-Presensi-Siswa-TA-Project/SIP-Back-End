@@ -13,5 +13,6 @@ router.post('/search', presensiMapelController.searchPresensiMapelByForm);
 router.post('/', formParser, presensiMapelController.createPresensiMapel);
 router.put('/update', formParser, presensiMapelController.updatePresensiMapel);
 router.delete('/:id', presensiMapelController.deletePresensiMapel);
+router.delete('/jadwal/:id_jadwal/tanggal/:tanggal_presensi', presensiMapelController.deletePresensiMapelByJadwalAndTanggal);
 
 module.exports = router;
