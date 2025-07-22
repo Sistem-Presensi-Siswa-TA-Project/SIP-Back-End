@@ -19,6 +19,8 @@ router.put('/:id_user', userController.updateUser);
 router.put('/password/:id_user', userController.updatePassword);
 // PUT reset password by id_user
 router.put('/reset-password/:id_user', userController.resetPassword);
+// DELETE user by role guru
+router.delete('/:id_user', userController.deleteUserById);
 // DELETE user by id_user
 router.delete('/:id_user', userController.deleteUserById);
 // DELETE user by username
