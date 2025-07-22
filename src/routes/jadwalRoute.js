@@ -26,4 +26,7 @@ router.put('/:id', jadwalController.updateJadwal);
 // DELETE jadwal
 router.delete('/:id', jadwalController.deleteJadwal);
 
+// DELETE semua jadwal
+router.delete('/', jadwalController.deleteAllJadwal);
+
 module.exports = router;
