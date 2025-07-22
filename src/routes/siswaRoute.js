@@ -22,6 +22,9 @@ router.post('/', formParser, siswaController.createSiswa);
 router.put('/:id_siswa', siswaController.updateSiswa);
 
 // DELETE siswa berdasarkan ID
+router.delete('/', siswaController.deleteAllSiswa);
+
+// DELETE siswa berdasarkan ID
 router.delete('/:id_siswa', siswaController.deleteSiswa);
 
 module.exports = router;
