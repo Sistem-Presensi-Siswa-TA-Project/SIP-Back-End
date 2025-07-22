@@ -191,6 +191,19 @@ exports.updateGuru = async (req, res) => {
   }
 };
 
+// DELETE semua guru
+exports.deleteAllGuru = async (req, res) => {
+  try {
+    const [result] = await pool.execute('DELETE FROM Guru');
+    res.json({
+      message: 'Semua guru berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua guru', error: err.message });
+  }
+};
+
 // DELETE guru
 exports.deleteGuru = async (req, res) => {
   const { id_guru } = req.params;
