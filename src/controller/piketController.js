@@ -180,7 +180,20 @@ exports.updatePiket = async (req, res) => {
   }
 };
 
-// DELETE: hapus piket
+// DELETE: semua piket
+exports.deleteAllPiket = async (req, res) => {
+  try {
+    const [result] = await pool.execute('DELETE FROM Piket');
+    res.json({
+      message: 'Semua piket berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua piket', error: err.message });
+  }
+};
+
+// DELETE: hapus piket by id
 exports.deletePiket = async (req, res) => {
   const { id_piket } = req.params;
 
