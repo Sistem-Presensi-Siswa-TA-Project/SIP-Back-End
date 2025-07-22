@@ -306,7 +306,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 // DELETE semua role guru
-exports.deleteAllGuru = async (req, res) => {
+exports.deleteAllUserGuru = async (req, res) => {
   try {
     const [result] = await pool.execute(`DELETE FROM User WHERE role = 'guru'`);
     res.json({
@@ -319,7 +319,7 @@ exports.deleteAllGuru = async (req, res) => {
 };
 
 // DELETE semua role piket
-exports.deleteAllPiket = async (req, res) => {
+exports.deleteAllUserPiket = async (req, res) => {
   try {
     const [result] = await pool.execute(`DELETE FROM User WHERE role = 'piket'`);
     res.json({
