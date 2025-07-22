@@ -305,6 +305,32 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
+// DELETE semua role guru
+exports.deleteAllGuru = async (req, res) => {
+  try {
+    const [result] = await pool.execute(`DELETE FROM User WHERE role = 'guru'`);
+    res.json({
+      message: 'Semua user guru berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua user guru', error: err.message });
+  }
+};
+
+// DELETE semua role piket
+exports.deleteAllPiket = async (req, res) => {
+  try {
+    const [result] = await pool.execute(`DELETE FROM User WHERE role = 'piket'`);
+    res.json({
+      message: 'Semua user piket berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua user piket', error: err.message });
+  }
+};
+
 // DELETE: Hapus user by id
 exports.deleteUserById = async (req, res) => {
     const { id_user } = req.params;
