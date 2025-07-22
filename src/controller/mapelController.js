@@ -90,6 +90,19 @@ exports.updateMapel = async (req, res) => {
   }
 };
 
+// DELETE semua jadwal
+exports.deleteAllMapel = async (req, res) => {
+  try {
+    const [result] = await pool.execute('DELETE FROM Mata_Pelajaran');
+    res.json({
+      message: 'Semua mapel berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua mapel', error: err.message });
+  }
+};
+
 // DELETE mapel
 exports.deleteMapel = async (req, res) => {
   const { id } = req.params;
