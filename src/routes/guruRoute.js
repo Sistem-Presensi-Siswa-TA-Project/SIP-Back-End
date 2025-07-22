@@ -8,6 +8,7 @@ router.get('/nomor-induk/:nomor_induk', guruController.getGuruByNomorInduk);
 router.get('/:id_guru', guruController.getGuruById);
 router.post('/', formParser, guruController.createGuru);
 router.put('/:id_guru', guruController.updateGuru);
+router.delete('/', guruController.deleteAllGuru);
 router.delete('/:id_guru', guruController.deleteGuru);
 
 module.exports = router;
