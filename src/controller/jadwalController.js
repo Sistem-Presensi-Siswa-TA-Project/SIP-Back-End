@@ -161,6 +161,19 @@ exports.updateJadwal = async (req, res) => {
   }
 };
 
+// DELETE semua jadwal
+exports.deleteAllJadwal = async (req, res) => {
+  try {
+    const [result] = await pool.execute('DELETE FROM Jadwal');
+    res.json({
+      message: 'Semua jadwal berhasil dihapus',
+      affectedRows: result.affectedRows
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal hapus semua jadwal', error: err.message });
+  }
+};
+
 // DELETE jadwal
 exports.deleteJadwal = async (req, res) => {
   const { id } = req.params;
