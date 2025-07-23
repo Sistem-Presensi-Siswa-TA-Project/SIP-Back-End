@@ -30,7 +30,7 @@ exports.createPresensiPiket = async (req, res) => {
     );
     
     if (siswaRows.length === 0) {
-      return res.status(404).json({ message: 'Siswa belum terdaftar!' });
+      return res.status(404).json({ message: 'Nomor induk siswa belum terdaftar!' });
     }
     
     // Cari apakah sudah ada data presensi untuk nisn & tanggal tsb
