@@ -17,11 +17,22 @@ exports.createPresensiPiket = async (req, res) => {
   if (!nisn || !tanggal_presensi || !waktu || !nama_siswa || !kelas || !nomor_induk_piket || !jenis) {
     return res.status(400).json({ message: 'Semua field wajib diisi' });
   }
+  
   if (jenis !== 'Presensi Masuk' && jenis !== 'Presensi Pulang') {
     return res.status(400).json({ message: 'Jenis presensi tidak valid' });
   }
 
   try {
+    // Cek apakah siswa sudah terdaftar atau belum
+    const [siswaRows] = await pool.execute(
+      'SELECT * FROM Siswa WHERE nisn = ?',
+      [nisn]
+    );
+    
+    if (siswaRows.length === 0) {
+      return res.status(404).json({ message: 'Siswa belum terdaftar!' });
+    }
+    
     // Cari apakah sudah ada data presensi untuk nisn & tanggal tsb
     const [existingRows] = await pool.execute(
       'SELECT * FROM Presensi_Piket WHERE nisn = ? AND tanggal_presensi = ?',
