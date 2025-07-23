@@ -35,21 +35,37 @@ exports.getSiswaByKelas = async (req, res) => {
     }
 
     try {
+        // Cek di kolom kelas terlebih dahulu
         const [rows] = await pool.execute(
             'SELECT * FROM Siswa WHERE kelas = ? ORDER BY nisn ASC',
             [kelas]
         );
 
-        if (rows.length === 0) {
-            return res.status(404).json({
-                message: 'Tidak ditemukan siswa dengan kelas tersebut.'
+        if (rows.length > 0) {
+            return res.status(200).json({
+                message: 'Berhasil mengambil data siswa berdasarkan kelas',
+                data: rows
             });
         }
 
-        res.status(200).json({
-            message: 'Berhasil mengambil data siswa berdasarkan kelas',
-            data: rows
+        // Jika tidak ditemukan, cek di kelas_gabungan
+        const [rowsGabungan] = await pool.execute(
+            'SELECT * FROM Siswa WHERE kelas_gabungan = ? ORDER BY nisn ASC',
+            [kelas]
+        );
+
+        if (rowsGabungan.length > 0) {
+            return res.status(200).json({
+                message: 'Berhasil mengambil data siswa berdasarkan kelas_gabungan',
+                data: rowsGabungan
+            });
+        }
+
+        // Jika tetap tidak ada
+        return res.status(404).json({
+            message: 'Tidak ditemukan siswa dengan kelas tersebut.'
         });
+
     } catch (error) {
         console.error('Gagal mengambil data siswa berdasarkan kelas:', error);
         res.status(500).json({
