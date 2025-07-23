@@ -6,37 +6,67 @@ exports.createPresensiPiket = async (req, res) => {
   const {
     nisn,
     tanggal_presensi,
-    waktu_masuk,
-    waktu_pulang,
+    waktu,
     nama_siswa,
     kelas,
-    nomor_induk_piket
+    nomor_induk_piket,
+    jenis, // "Presensi Masuk" atau "Presensi Pulang"
   } = req.body;
 
-  // Validasi semua field wajib
-  if (!nisn || !tanggal_presensi || !waktu_masuk || !waktu_pulang || !nama_siswa || !kelas || !nomor_induk_piket) {
+  // Validasi
+  if (!nisn || !tanggal_presensi || !waktu || !nama_siswa || !kelas || !nomor_induk_piket || !jenis) {
     return res.status(400).json({ message: 'Semua field wajib diisi' });
+  }
+  if (jenis !== 'Presensi Masuk' && jenis !== 'Presensi Pulang') {
+    return res.status(400).json({ message: 'Jenis presensi tidak valid' });
   }
 
   try {
-    // 🔍 Cek apakah sudah absen
-    const [existing] = await pool.execute(
+    // Cari apakah sudah ada data presensi untuk nisn & tanggal tsb
+    const [existingRows] = await pool.execute(
       'SELECT * FROM Presensi_Piket WHERE nisn = ? AND tanggal_presensi = ?',
       [nisn, tanggal_presensi]
     );
 
-    if (existing.length > 0) {
-      return res.status(409).json({ message: 'Siswa dengan NISN ini sudah melakukan presensi pada tanggal tersebut' });
-    }
+    if (existingRows.length === 0) {
+      // --- INSERT baru ---
+      const id_presensipiket = `PP-${nanoid(12)}`;
+      let waktu_masuk = null;
+      let waktu_pulang = null;
+      if (jenis === 'Presensi Masuk') waktu_masuk = waktu;
+      if (jenis === 'Presensi Pulang') waktu_pulang = waktu;
 
-    const id_presensipiket = `PP-${nanoid(12)}`;
-    await pool.execute(
-      'INSERT INTO Presensi_Piket (id_presensipiket, nisn, tanggal_presensi, waktu_masuk, waktu_pulang, nama_siswa, kelas, nomor_induk_piket) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [id_presensipiket, nisn, tanggal_presensi, waktu_masuk, waktu_pulang, nama_siswa, kelas, nomor_induk_piket]
-    );
-    res.status(201).json({ message: 'Presensi piket berhasil ditambahkan', id_presensipiket });
+      await pool.execute(
+        'INSERT INTO Presensi_Piket (id_presensipiket, nisn, tanggal_presensi, waktu_masuk, waktu_pulang, nama_siswa, kelas, nomor_induk_piket) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [id_presensipiket, nisn, tanggal_presensi, waktu_masuk, waktu_pulang, nama_siswa, kelas, nomor_induk_piket]
+      );
+      return res.status(201).json({ message: `Presensi ${jenis === 'Presensi Masuk' ? 'masuk' : 'pulang'} berhasil dicatat`, id_presensipiket });
+    } else {
+      // --- UPDATE (sudah ada data hari itu) ---
+      const presensi = existingRows[0];
+
+      if (jenis === 'Presensi Masuk') {
+        if (presensi.waktu_masuk) {
+          return res.status(409).json({ message: 'Siswa telah melakukan presensi masuk!' });
+        }
+        await pool.execute(
+          'UPDATE Presensi_Piket SET waktu_masuk = ? WHERE id_presensipiket = ?',
+          [waktu, presensi.id_presensipiket]
+        );
+        return res.status(200).json({ message: 'Presensi masuk berhasil dicatat' });
+      } else if (jenis === 'Presensi Pulang') {
+        if (presensi.waktu_pulang) {
+          return res.status(409).json({ message: 'Siswa telah melakukan presensi pulang!' });
+        }
+        await pool.execute(
+          'UPDATE Presensi_Piket SET waktu_pulang = ? WHERE id_presensipiket = ?',
+          [waktu, presensi.id_presensipiket]
+        );
+        return res.status(200).json({ message: 'Presensi pulang berhasil dicatat' });
+      }
+    }
   } catch (err) {
-    res.status(500).json({ message: 'Gagal tambah presensi piket', error: err.message });
+    res.status(500).json({ message: 'Gagal tambah/update presensi piket', error: err.message });
   }
 };
 
