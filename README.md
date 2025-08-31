@@ -92,9 +92,13 @@ Endpoint utama meliputi:
 - Presensi Mapel → Presensi per mata pelajaran
 - Presensi Piket → Presensi piket masuk/pulang
 - Piket → CRUD data piket
-- User → CRUD data pengguna / user 
+- User → CRUD data pengguna / user
+
+## 👥 Kontributor
+Backend dikembangkan oleh **Azra Nadhira Aulia** dengan dukungan tim Projek TA.
+
 
 ## 📜 Lisensi
 
-Proyek ini dibuat untuk kepentingan akademik (Tugas Akhir).
+Proyek ini dibuat untuk kepentingan akademik (Tugas Akhir) dan tidak diperuntukkan untuk penggunaan komersial.
 
