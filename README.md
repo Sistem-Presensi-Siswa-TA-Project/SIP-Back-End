@@ -54,12 +54,12 @@ npm install
 
 ### 3. Konfigurasi Database 
 
-- Buat database MySQL sesuai kebutuhan
-- Sesuaikan konfigurasi pada file .env
+- Import file SQL yang ada di folder `/database` ke MySQL/phpMyAdmin
+- Sesuaikan konfigurasi pada file `.env`
 
-Contoh .env : 
+Contoh `.env` : 
 
-```.env
+```
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=
