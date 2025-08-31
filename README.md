@@ -26,6 +26,7 @@ Sistem ini dirancang untuk mendukung proses presensi siswa secara **real-time**
 ---
 
 ## 📂 Struktur Direktori
+
 ```
 SIP-Back-End/
 ├── database/ # Skrip SQL & konfigurasi database
@@ -41,12 +42,16 @@ SIP-Back-End/
 
 ### 1. Clone Repository
 
+```
 git clone https://github.com/azranadhira/SIP-Back-End.git
 cd SIP-Back-End
+```
 
 ### 2. Install Depedencies
 
+```
 npm install
+```
 
 ### 3. Konfigurasi Database 
 
@@ -54,16 +59,21 @@ npm install
 - Sesuaikan konfigurasi pada file .env
 
 Contoh .env : 
+
+```.env
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=
 DB_NAME=sipsiswa
 JWT_SECRET=your_secret_key
 PORT=5000
+```
 
 ### 4. Jalankan Server 
 
+```
 npm start 
+```
 
 Server akan berjalan di:
 👉 http://localhost:5000
