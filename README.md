@@ -11,7 +11,7 @@ Sistem ini dirancang untuk mendukung proses presensi siswa secara **real-time**
 - 📌 Presensi per mata pelajaran (Presensi Mapel)
 - 🔐 Autentikasi berbasis **JWT Token**
 - 🗄️ Database relasional dengan **MySQL**
-- ⚡ API berbasis **RESTful**
+- ⚡ API berbasis **REST API**
 
 ---
 
@@ -91,6 +91,8 @@ Endpoint utama meliputi:
 - Jadwal → CRUD jadwal pelajaran
 - Presensi Mapel → Presensi per mata pelajaran
 - Presensi Piket → Presensi piket masuk/pulang
+- Piket → CRUD data piket
+- User → CRUD data pengguna / user 
 
 ## 📜 Lisensi
 
