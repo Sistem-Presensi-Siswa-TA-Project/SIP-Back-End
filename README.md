@@ -43,8 +43,7 @@ SIP-Back-End/
 ### 1. Clone Repository
 
 ```
-git clone https://github.com/azranadhira/SIP-Back-End.git
-cd SIP-Back-End
+git clone https://github.com/Sistem-Presensi-Siswa-TA-Project/SIP-Back-End.git
 ```
 
 ### 2. Install Depedencies
