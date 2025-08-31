@@ -30,7 +30,7 @@ Sistem ini dirancang untuk mendukung proses presensi siswa secara **real-time**
 ```
 SIP-Back-End/
 ├── database/ # Skrip SQL & konfigurasi database
-├── src/ # Source code utama (controller, routes, models, middleware)
+├── src/ # Source code utama (config, controller, routes, middleware, index.js)
 ├── testdb.js # File uji koneksi database
 ├── package.json # Konfigurasi npm package
 ├── README.md # Dokumentasi proyek
