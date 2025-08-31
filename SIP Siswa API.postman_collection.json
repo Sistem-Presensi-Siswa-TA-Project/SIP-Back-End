@@ -1,0 +1,2288 @@
+{
+	"info": {
+		"_postman_id": "1ef7aa4e-3376-47bd-beda-5b12aec29105",
+		"name": "SIP Siswa API",
+		"description": "Collection ini berisi endpoint REST API yang digunakan dalam sistem informasi presensi. Endpoint ini meliputi manajemen data pengguna, guru, mata pelajaran, jadwal, piket, presensi mata pelajaran, presensi piket, saran, siswa, serta proses autentikasi. Setiap request dikelompokkan berdasarkan entitas tabel yang ada pada database",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "44413058",
+		"_collection_link": "https://project-ta.postman.co/workspace/sip-siswa~2d375528-085e-4725-ab66-c542ad6569cc/collection/44413058-1ef7aa4e-3376-47bd-beda-5b12aec29105?action=share&source=collection_link&creator=44413058"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "POST login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Guru1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "smpbabussalam",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Guru",
+			"item": [
+				{
+					"name": "GET all Guru",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GET Guru by nomor induk",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}guru/nomor-induk/:nomor_induk",
+							"host": [
+								"{{base_url}}guru"
+							],
+							"path": [
+								"nomor-induk",
+								":nomor_induk"
+							],
+							"variable": [
+								{
+									"key": "nomor_induk",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Guru by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}guru/:id_guru",
+							"host": [
+								"{{base_url}}guru"
+							],
+							"path": [
+								":id_guru"
+							],
+							"variable": [
+								{
+									"key": "id_guru",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Guru",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "jenis_kelamin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tempat_lahir",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_lahir",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "mata_pelajaran",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "jabatan",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}guru"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Guru",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "jenis_kelamin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tempat_lahir",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_lahir",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "mata_pelajaran",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "jabatan",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}guru/:id_guru",
+							"host": [
+								"{{base_url}}guru"
+							],
+							"path": [
+								":id_guru"
+							],
+							"variable": [
+								{
+									"key": "id_guru",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Guru by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}guru/:id_guru",
+							"host": [
+								"{{base_url}}guru"
+							],
+							"path": [
+								":id_guru"
+							],
+							"variable": [
+								{
+									"key": "id_guru",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all Guru",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}guru"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Jadwal",
+			"item": [
+				{
+					"name": "GET all Jadwal",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}jadwal"
+					},
+					"response": []
+				},
+				{
+					"name": "GET jadwal by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}jadwal/:id_jadwal",
+							"host": [
+								"{{base_url}}jadwal"
+							],
+							"path": [
+								":id_jadwal"
+							],
+							"variable": [
+								{
+									"key": "id_jadwal",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET jadwal by hari dan guru",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}jadwal/hari/:hari/guru/:nomor_induk_guru",
+							"host": [
+								"{{base_url}}jadwal"
+							],
+							"path": [
+								"hari",
+								":hari",
+								"guru",
+								":nomor_induk_guru"
+							],
+							"variable": [
+								{
+									"key": "hari",
+									"value": ""
+								},
+								{
+									"key": "nomor_induk_guru",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET jadwal by guru",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}jadwal/guru/:nomor_induk_guru",
+							"host": [
+								"{{base_url}}jadwal"
+							],
+							"path": [
+								"guru",
+								":nomor_induk_guru"
+							],
+							"variable": [
+								{
+									"key": "nomor_induk_guru",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET jadwal by kelas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}jadwal/kelas/:kelas",
+							"host": [
+								"{{base_url}}jadwal"
+							],
+							"path": [
+								"kelas",
+								":kelas"
+							],
+							"variable": [
+								{
+									"key": "kelas",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create jadwal",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_mapel",
+									"value": ":id_mapel",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk_guru",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "hari",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "waktu",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tahun_ajaran",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "semester",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}jadwal"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Jadwal",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_mapel",
+									"value": ":id_mapel",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk_guru",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "hari",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "waktu",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tahun_ajaran",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "semester",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}jadwal/:id_jadwal",
+							"host": [
+								"{{base_url}}jadwal"
+							],
+							"path": [
+								":id_jadwal"
+							],
+							"variable": [
+								{
+									"key": "id_jadwal",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE jadwal by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}jadwal/:id_jadwal",
+							"host": [
+								"{{base_url}}jadwal"
+							],
+							"path": [
+								":id_jadwal"
+							],
+							"variable": [
+								{
+									"key": "id_jadwal",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all jadwal",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}jadwal"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mapel",
+			"item": [
+				{
+					"name": "GET all mata pelajaran",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}mapel"
+					},
+					"response": []
+				},
+				{
+					"name": "GET mata pelajaran by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}mapel/:id_mapel",
+							"host": [
+								"{{base_url}}mapel"
+							],
+							"path": [
+								":id_mapel"
+							],
+							"variable": [
+								{
+									"key": "id_mapel",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create mata pelajaran",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_mapel",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "deskripsi",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}mapel"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT update mata pelajaran by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_mapel",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "deskripsi",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}mapel/:id_mapel",
+							"host": [
+								"{{base_url}}mapel"
+							],
+							"path": [
+								":id_mapel"
+							],
+							"variable": [
+								{
+									"key": "id_mapel",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE mata pelajaran by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}mapel/:id_mapel",
+							"host": [
+								"{{base_url}}mapel"
+							],
+							"path": [
+								":id_mapel"
+							],
+							"variable": [
+								{
+									"key": "id_mapel",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all mata pelajaran",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}mapel"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Piket",
+			"item": [
+				{
+					"name": "GET all piket",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}piket"
+					},
+					"response": []
+				},
+				{
+					"name": "GET piket by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}piket/:id_piket",
+							"host": [
+								"{{base_url}}piket"
+							],
+							"path": [
+								":id_piket"
+							],
+							"variable": [
+								{
+									"key": "id_piket",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET piket by kode piket",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}piket/kode/:kodePiket",
+							"host": [
+								"{{base_url}}piket"
+							],
+							"path": [
+								"kode",
+								":kodePiket"
+							],
+							"variable": [
+								{
+									"key": "kodePiket",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create piket",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nomor_induk",
+									"value": ":nomor_induk_guru",
+									"type": "text"
+								},
+								{
+									"key": "kode_piket",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "status ",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}piket"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT update piket",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nomor_induk",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kode_piket",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}piket/:id_piket",
+							"host": [
+								"{{base_url}}piket"
+							],
+							"path": [
+								":id_piket"
+							],
+							"variable": [
+								{
+									"key": "id_piket",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE piket by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}piket/:id_piket",
+							"host": [
+								"{{base_url}}piket"
+							],
+							"path": [
+								":id_piket"
+							],
+							"variable": [
+								{
+									"key": "id_piket",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all piket",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}piket"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Presensimapel",
+			"item": [
+				{
+					"name": "GET all presensi mata pelajaran",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}presensi-mapel"
+					},
+					"response": []
+				},
+				{
+					"name": "GET presensi mata pelajaran by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/:id_presensiMapel",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								":id_presensiMapel"
+							],
+							"variable": [
+								{
+									"key": "id_presensiMapel",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET presensi mata pelajaran by id jadwal",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/jadwal/:idJadwal",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								"jadwal",
+								":idJadwal"
+							],
+							"variable": [
+								{
+									"key": "idJadwal",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET presensi mata pelajaran by id jadwal dan tanggal",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/jadwal/:idJadwal/tanggal/:tanggal",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								"jadwal",
+								":idJadwal",
+								"tanggal",
+								":tanggal"
+							],
+							"variable": [
+								{
+									"key": "idJadwal",
+									"value": ""
+								},
+								{
+									"key": "tanggal",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET presensi mata pelajaran by kelas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/kelas/:kelas",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								"kelas",
+								":kelas"
+							],
+							"variable": [
+								{
+									"key": "kelas",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST pencarian presensi mata pelajaran",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tanggal",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "mapel",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}presensi-mapel/search"
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create presensi mata pelajaran",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_jadwal",
+									"value": ":id_jadwal",
+									"type": "text"
+								},
+								{
+									"key": "nisn",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_presensi",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "waktu_presensi",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "keterangan",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama_siswa",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk_guru",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}presensi-mapel"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update presensi mata pelajaran by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_jadwal",
+									"value": ":id_jadwal",
+									"type": "text"
+								},
+								{
+									"key": "nisn",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_presensi",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "waktu_presensi",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "keterangan",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama_siswa",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk_guru",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/:id_presensiMapel",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								":id_presensiMapel"
+							],
+							"variable": [
+								{
+									"key": "id_presensiMapel",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE presensi mata pelajaran by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/:id_presensiMapel",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								":id_presensiMapel"
+							],
+							"variable": [
+								{
+									"key": "id_presensiMapel",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE presensi mata pelajaran by id jadwal dan tanggal",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-mapel/jadwal/:id_jadwal/tanggal/:tanggal_presensi",
+							"host": [
+								"{{base_url}}presensi-mapel"
+							],
+							"path": [
+								"jadwal",
+								":id_jadwal",
+								"tanggal",
+								":tanggal_presensi"
+							],
+							"variable": [
+								{
+									"key": "id_jadwal",
+									"value": ""
+								},
+								{
+									"key": "tanggal_presensi",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Presensipiket",
+			"item": [
+				{
+					"name": "GET all presensi piket",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}presensi-piket"
+					},
+					"response": []
+				},
+				{
+					"name": "GET presensi piket by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-piket/:id",
+							"host": [
+								"{{base_url}}presensi-piket"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET presensi piket by kelas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-piket/kelas/:kelas",
+							"host": [
+								"{{base_url}}presensi-piket"
+							],
+							"path": [
+								"kelas",
+								":kelas"
+							],
+							"variable": [
+								{
+									"key": "kelas",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST pencarian presensi piket",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tanggal_presensi ",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "nama_siswa",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}presensi-piket/search"
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create presensi piket",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nisn",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_presensi",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "waktu_masuk",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "waktu_pulang",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama_siswa",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk_piket",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}presensi-piket"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update presensi piket by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nisn",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_presensi",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "waktu_masuk",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "waktu_pulang",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama_siswa",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nomor_induk_piket",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}presensi-piket/:id",
+							"host": [
+								"{{base_url}}presensi-piket"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE presensi piket by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}presensi-piket/:id",
+							"host": [
+								"{{base_url}}presensi-piket"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Saran",
+			"item": [
+				{
+					"name": "POST Create saran",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "subjek",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "pesan",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}saran"
+					},
+					"response": []
+				},
+				{
+					"name": "GET all saran",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}saran"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Siswa",
+			"item": [
+				{
+					"name": "GET all siswa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}siswa"
+					},
+					"response": []
+				},
+				{
+					"name": "GET siswa by kelas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}siswa/kelas/:kelas",
+							"host": [
+								"{{base_url}}siswa"
+							],
+							"path": [
+								"kelas",
+								":kelas"
+							],
+							"variable": [
+								{
+									"key": "kelas",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET siswa by nisn",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}siswa/nisn/:nisn",
+							"host": [
+								"{{base_url}}siswa"
+							],
+							"path": [
+								"nisn",
+								":nisn"
+							],
+							"variable": [
+								{
+									"key": "nisn",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET siswa by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}siswa/:id_siswa",
+							"host": [
+								"{{base_url}}siswa"
+							],
+							"path": [
+								":id_siswa"
+							],
+							"variable": [
+								{
+									"key": "id_siswa",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create siswa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nisn",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "jenis_kelamin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tempat_lahir",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_lahir",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "nomor_hp",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas_gabungan",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}siswa"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update siswa berdasarkan id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nisn",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "nama",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "jenis_kelamin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tempat_lahir",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tanggal_lahir",
+									"value": "YYYY-MM-DD",
+									"type": "text"
+								},
+								{
+									"key": "nomor_hp",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "kelas_gabungan",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}siswa/:id_siswa",
+							"host": [
+								"{{base_url}}siswa"
+							],
+							"path": [
+								":id_siswa"
+							],
+							"variable": [
+								{
+									"key": "id_siswa",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE siswa by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}siswa/:id_siswa",
+							"host": [
+								"{{base_url}}siswa"
+							],
+							"path": [
+								":id_siswa"
+							],
+							"variable": [
+								{
+									"key": "id_siswa",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all siswa",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}siswa"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "GET all user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "GET user by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}users/:id",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET user by role",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}users/role/:role",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								"role",
+								":role"
+							],
+							"variable": [
+								{
+									"key": "role",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET user by username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}users/username/:username",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								"username",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update user by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Guru1",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "piket",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}users/id-user"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update password user by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}users/password/:id_user",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								"password",
+								":id_user"
+							],
+							"variable": [
+								{
+									"key": "id_user",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Reset Password to default",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code harus 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response berisi pesan reset password\", function () {\r",
+									"  var jsonData = pm.response.json();\r",
+									"  pm.expect(jsonData).to.have.property(\"message\");\r",
+									"  pm.expect(jsonData.message).to.eql(\"Password user berhasil direset ke default.\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Password default sesuai yang ditentukan\", function () {\r",
+									"  var jsonData = pm.response.json();\r",
+									"  pm.expect(jsonData).to.have.property(\"password_default\");\r",
+									"  pm.expect(jsonData.password_default).to.eql(\"smpbabussalam\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}users/reset-password/:id_user",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								"reset-password",
+								":id_user"
+							],
+							"variable": [
+								{
+									"key": "id_user",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all user guru",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}users/guru"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all user piket",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": "{{base_url}}users/piket"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE user by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}users/:id_user",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								":id_user"
+							],
+							"variable": [
+								{
+									"key": "id_user",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE user by username",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}users/username/:username",
+							"host": [
+								"{{base_url}}users"
+							],
+							"path": [
+								"username",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
