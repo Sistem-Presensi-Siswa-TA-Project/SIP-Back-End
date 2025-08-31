@@ -1,5 +1,12 @@
 # 📘 SIP-Back-End
 
+![Node.js](https://img.shields.io/badge/Node.js-v18-green?logo=node.js)
+![Express.js](https://img.shields.io/badge/Express.js-4.x-lightgrey?logo=express)
+![MySQL](https://img.shields.io/badge/MySQL-8-blue?logo=mysql)
+![JWT](https://img.shields.io/badge/JWT-Auth-orange?logo=jsonwebtokens)
+![License](https://img.shields.io/badge/License-Academic-lightblue)
+![Last Commit](https://img.shields.io/github/last-commit/azranadhira/SIP-Back-End)
+![Repo Size](https://img.shields.io/github/repo-size/azranadhira/SIP-Back-End)
 Back-End dari **Sistem Informasi Presensi Siswa** di **SMP Plus Babussalam**, dibuat sebagai bagian dari Tugas Akhir (TA).  
 Sistem ini dirancang untuk mendukung proses presensi siswa secara **real-time**
 
